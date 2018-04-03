@@ -1,0 +1,286 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Online 60 Seconds</title>
+    	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.1.0/nouislider.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.1.0/nouislider.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.1.0/wNumb.min.js"></script>
+    
+    
+</head>
+    <style>
+        .hide {
+            visibility: hidden;
+            font-weight: bold;
+            margin-left: 5px;
+        }
+    </style>
+
+<body>
+
+	<div class="container" style="margin-left:1em; margin-top:4em;">
+          <form action="#">
+            <div class="row">
+                <div class="col s4"> Posts auf Facebook? </div>
+                <div class="col s8" id="facebook"></div>
+            </div>
+            <br/>
+            <br/>
+            
+            <div class="row">
+                <div class="col s4">Tweets auf Twitter? </div>
+                <div class="col s8" id="twitter"></div>
+            </div>  
+              <!--div> 350.000 Tweets</div-->
+            <br/>
+            <br/>              
+            
+            <div class="row">
+                <div class="col s4">Änderungen auf Wikipedia?</div>
+                <div class="col s8" id="wiki"></div>
+            </div>  
+            <br/>
+            <br/>
+              
+            <div class="row">
+                <div class="col s4">Videos auf Youtube gesehen?</div>
+                <div class="col s8" id="youtube"></div>
+            </div>  
+            <br/>
+            <br/>
+              
+            <div class="row">
+                <div class="col s4">Google Suchanfragen?</div>
+                <div class="col s8" id="google"></div>
+            </div>  
+              
+            <button id="eval-btn" class="btn" onclick="eval()">Auswerten</button>
+  </form>
+	</div>
+	
+<!-- Quellen: 
+https://www.domo.com/learn/data-never-sleeps-5
+http://www.dailyinfographic.com/what-happens-internet-in-60-seconds
+-->
+
+    <script>
+    window.onload = function(){
+        var fbSlider = document.getElementById('facebook');
+
+        noUiSlider.create(fbSlider, {
+            start: [1000],
+            tooltips: true,
+            connect: false,
+            step: 1,
+            orientation: 'horizontal', // 'horizontal' or 'vertical'
+            range: {
+		      'min': [  1000 ],
+		      '30%': [  100000 ],
+		      '70%': [  1000000 ],
+		      'max': [  10000000 ]
+            }, format: wNumb({
+		          decimals: 3,
+		          thousand: '.',
+                })
+        });       
+        
+        var twSlider = document.getElementById('twitter');
+        //350.000
+        noUiSlider.create(twSlider, {
+            start: [100],
+            tooltips: true,
+            connect: false,
+            step: 1,
+            orientation: 'horizontal', // 'horizontal' or 'vertical'
+            range: {
+		      'min': [  100 ],
+		      '30%': [  25000 ],
+		      '70%': [  1000000 ],
+		      'max': [ 5000000 ]
+            }, format: wNumb({
+		          decimals: 3,
+		          thousand: '.',
+                })
+        });    
+        
+        
+        var wikiSlider = document.getElementById('wiki');
+        //600
+        noUiSlider.create(wikiSlider, {
+            start: [1],
+            tooltips: true,
+            connect: false,
+            step: 1,
+            orientation: 'horizontal', // 'horizontal' or 'vertical'
+            range: {
+		      'min': [  1 ],
+		      '30%': [  25 ],
+		      '70%': [  100 ],
+		      'max': [ 1000 ]
+            }, format: wNumb({
+		          decimals: 3,
+		          thousand: '.',
+                })
+        });
+        
+        var ytSlider = document.getElementById('youtube');
+        // yt
+        noUiSlider.create(ytSlider, {
+            start: [1000],
+            tooltips: true,
+            connect: false,
+            step: 1,
+            orientation: 'horizontal', // 'horizontal' or 'vertical'
+            range: {
+		      'min': [  1000 ],
+		      '30%': [  100000 ],
+		      '70%': [  1000000 ],
+		      'max': [  10000000 ]
+            }, format: wNumb({
+		          decimals: 3,
+		          thousand: '.',
+                })
+        });    
+        
+        
+        var glSlider = document.getElementById('google');
+
+        noUiSlider.create(glSlider, {
+            start: [1000],
+            tooltips: true,
+            connect: false,
+            step: 1,
+            orientation: 'horizontal', // 'horizontal' or 'vertical'
+            range: {
+		      'min': [  1000 ],
+		      '30%': [  100000 ],
+		      '70%': [  1000000 ],
+		      'max': [  10000000 ]
+            }, format: wNumb({
+		          decimals: 3,
+		          thousand: '.',
+                })
+        });    
+    } 
+    
+
+        
+var eval = function(){
+    document.getElementById('eval-btn').style.visibility='hidden';;
+    var fbSlider = document.getElementById('facebook');
+    var twSlider = document.getElementById('twitter');
+    var wikiSlider = document.getElementById('wiki');
+    var ytSlider = document.getElementById('youtube');
+    var glSlider = document.getElementById('google');
+    
+    var facebookValue = fbSlider.noUiSlider.get();  
+    var twitterValue = twSlider.noUiSlider.get();
+    var wikiValue = wikiSlider.noUiSlider.get();  
+    var ytValue = ytSlider.noUiSlider.get();
+    var glValue = glSlider.noUiSlider.get();
+    
+    fbSlider.noUiSlider.destroy();
+    twSlider.noUiSlider.destroy();
+    wikiSlider.noUiSlider.destroy();
+    ytSlider.noUiSlider.destroy();
+    glSlider.noUiSlider.destroy();
+    
+    noUiSlider.create(fbSlider, {
+            start: [facebookValue, 300000],
+            tooltips: true,
+            connect: true,
+            step: 1,
+            orientation: 'horizontal', // 'horizontal' or 'vertical'
+            range: {
+		      'min': [  1000 ],
+		      '30%': [  100000 ],
+		      '70%': [  1000000 ],
+		      'max': [  10000000 ]
+            }, format: wNumb({
+		          decimals: 3,
+		          thousand: '.',
+                })
+        });       
+        
+    noUiSlider.create(twSlider, {
+            start: [twitterValue, 350000],
+            tooltips: true,
+            connect: true,
+            step: 1,
+            orientation: 'horizontal', // 'horizontal' or 'vertical'
+            range: {
+		      'min': [  100 ],
+		      '30%': [  25000 ],
+		      '70%': [  1000000 ],
+		      'max': [ 5000000 ]
+            }, format: wNumb({
+		          decimals: 3,
+		          thousand: '.',
+                })
+        });    
+        
+        
+
+    noUiSlider.create(wikiSlider, {
+            start: [wikiValue, 600],
+            tooltips: true,
+            connect: true,
+            step: 1,
+            orientation: 'horizontal', // 'horizontal' or 'vertical'
+            range: {
+		      'min': [  1 ],
+		      '30%': [  25 ],
+		      '70%': [  100 ],
+		      'max': [ 1000 ]
+            }, format: wNumb({
+		          decimals: 3,
+		          thousand: '.',
+                })
+        });
+        
+
+    noUiSlider.create(ytSlider, {
+            start: [ytValue, 3000000],
+            tooltips: true,
+            connect: true,
+            step: 1,
+            orientation: 'horizontal', // 'horizontal' or 'vertical'
+            range: {
+		      'min': [  1000 ],
+		      '30%': [  100000 ],
+		      '70%': [  1000000 ],
+		      'max': [  10000000 ]
+            }, format: wNumb({
+		          decimals: 3,
+		          thousand: '.',
+                })
+        });    
+        
+
+    noUiSlider.create(glSlider, {
+            start: [glValue, 3800000],
+            tooltips: true,
+            connect: true,
+            step: 1,
+            orientation: 'horizontal', // 'horizontal' or 'vertical'
+            range: {
+		      'min': [  1000 ],
+		      '30%': [  100000 ],
+		      '70%': [  1000000 ],
+		      'max': [  10000000 ]
+            }, format: wNumb({
+		          decimals: 3,
+		          thousand: '.',
+                })
+        });    
+    
+}
+	</script>
+</body>
+
+</html>
