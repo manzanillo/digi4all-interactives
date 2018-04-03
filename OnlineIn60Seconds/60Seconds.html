@@ -10,8 +10,8 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/11.1.0/nouislider.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/wnumb/1.1.0/wNumb.min.js"></script>
-    
-    
+
+
 </head>
     <style>
         .hide {
@@ -24,46 +24,44 @@
 <body>
 
 	<div class="container" style="margin-left:1em; margin-top:4em;">
-          <form action="#">
             <div class="row">
                 <div class="col s4"> Posts auf Facebook? </div>
                 <div class="col s8" id="facebook"></div>
             </div>
             <br/>
             <br/>
-            
+
             <div class="row">
                 <div class="col s4">Tweets auf Twitter? </div>
                 <div class="col s8" id="twitter"></div>
-            </div>  
+            </div>
               <!--div> 350.000 Tweets</div-->
             <br/>
-            <br/>              
-            
+            <br/>
+
             <div class="row">
                 <div class="col s4">Änderungen auf Wikipedia?</div>
                 <div class="col s8" id="wiki"></div>
-            </div>  
+            </div>
             <br/>
             <br/>
-              
+
             <div class="row">
                 <div class="col s4">Videos auf Youtube gesehen?</div>
                 <div class="col s8" id="youtube"></div>
-            </div>  
+            </div>
             <br/>
             <br/>
-              
+
             <div class="row">
                 <div class="col s4">Google Suchanfragen?</div>
                 <div class="col s8" id="google"></div>
-            </div>  
-              
+            </div>
+
             <button id="eval-btn" class="btn" onclick="eval()">Auswerten</button>
-  </form>
 	</div>
-	
-<!-- Quellen: 
+
+<!-- Quellen:
 https://www.domo.com/learn/data-never-sleeps-5
 http://www.dailyinfographic.com/what-happens-internet-in-60-seconds
 -->
@@ -87,8 +85,8 @@ http://www.dailyinfographic.com/what-happens-internet-in-60-seconds
 		          decimals: 3,
 		          thousand: '.',
                 })
-        });       
-        
+        });
+
         var twSlider = document.getElementById('twitter');
         //350.000
         noUiSlider.create(twSlider, {
@@ -106,9 +104,9 @@ http://www.dailyinfographic.com/what-happens-internet-in-60-seconds
 		          decimals: 3,
 		          thousand: '.',
                 })
-        });    
-        
-        
+        });
+
+
         var wikiSlider = document.getElementById('wiki');
         //600
         noUiSlider.create(wikiSlider, {
@@ -127,7 +125,7 @@ http://www.dailyinfographic.com/what-happens-internet-in-60-seconds
 		          thousand: '.',
                 })
         });
-        
+
         var ytSlider = document.getElementById('youtube');
         // yt
         noUiSlider.create(ytSlider, {
@@ -145,9 +143,9 @@ http://www.dailyinfographic.com/what-happens-internet-in-60-seconds
 		          decimals: 3,
 		          thousand: '.',
                 })
-        });    
-        
-        
+        });
+
+
         var glSlider = document.getElementById('google');
 
         noUiSlider.create(glSlider, {
@@ -165,11 +163,11 @@ http://www.dailyinfographic.com/what-happens-internet-in-60-seconds
 		          decimals: 3,
 		          thousand: '.',
                 })
-        });    
-    } 
-    
+        });
+    }
 
-        
+
+
 var eval = function(){
     document.getElementById('eval-btn').style.visibility='hidden';;
     var fbSlider = document.getElementById('facebook');
@@ -177,19 +175,19 @@ var eval = function(){
     var wikiSlider = document.getElementById('wiki');
     var ytSlider = document.getElementById('youtube');
     var glSlider = document.getElementById('google');
-    
-    var facebookValue = fbSlider.noUiSlider.get();  
+
+    var facebookValue = fbSlider.noUiSlider.get();
     var twitterValue = twSlider.noUiSlider.get();
-    var wikiValue = wikiSlider.noUiSlider.get();  
+    var wikiValue = wikiSlider.noUiSlider.get();
     var ytValue = ytSlider.noUiSlider.get();
     var glValue = glSlider.noUiSlider.get();
-    
+
     fbSlider.noUiSlider.destroy();
     twSlider.noUiSlider.destroy();
     wikiSlider.noUiSlider.destroy();
     ytSlider.noUiSlider.destroy();
     glSlider.noUiSlider.destroy();
-    
+
     noUiSlider.create(fbSlider, {
             start: [facebookValue, 300000],
             tooltips: true,
@@ -205,8 +203,8 @@ var eval = function(){
 		          decimals: 3,
 		          thousand: '.',
                 })
-        });       
-        
+        });
+
     noUiSlider.create(twSlider, {
             start: [twitterValue, 350000],
             tooltips: true,
@@ -222,9 +220,9 @@ var eval = function(){
 		          decimals: 3,
 		          thousand: '.',
                 })
-        });    
-        
-        
+        });
+
+
 
     noUiSlider.create(wikiSlider, {
             start: [wikiValue, 600],
@@ -242,7 +240,7 @@ var eval = function(){
 		          thousand: '.',
                 })
         });
-        
+
 
     noUiSlider.create(ytSlider, {
             start: [ytValue, 3000000],
@@ -259,8 +257,8 @@ var eval = function(){
 		          decimals: 3,
 		          thousand: '.',
                 })
-        });    
-        
+        });
+
 
     noUiSlider.create(glSlider, {
             start: [glValue, 3800000],
@@ -277,8 +275,8 @@ var eval = function(){
 		          decimals: 3,
 		          thousand: '.',
                 })
-        });    
-    
+        });
+
 }
 	</script>
 </body>
