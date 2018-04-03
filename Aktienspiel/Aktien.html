@@ -1,0 +1,277 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Aktienspiel</title>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.4.0/Chart.min.js"></script>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+	<!-- Compiled and minified JavaScript -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+	<script src="utils.js"></script>
+	<style>
+		canvas {
+			-moz-user-select: none;
+			-webkit-user-select: none;
+			-ms-user-select: none;
+		}
+	</style>
+</head>
+
+<body>
+	<div class="row" style="width:90%;">
+		<canvas id="canvas"></canvas>
+	</div>
+	<div class="row" style="margin-left:1em;">
+			<div class="col s2">Geld: <span id="money">1000</span></div>
+			<div class="col s2">Aktien rot: <span id="shares-red">0</span></div>
+			<div class="col s2">Aktien blau: <span id="shares-blue">0</span></div>
+			<div class="col s2">Aktien grün: <span id="shares-green">0</span></div>
+			<div class="col s2">Aktien orange: <span id="shares-orange">0</span></div>
+			<div class="col s2">Aktien Wert: <span id="shares-value">0</span></div>
+
+	</div>
+	<br>
+	<br>
+	<div class="row" style="margin-left:1em">
+		<div class="col s2"></div>
+		<div class="col s8">
+			<button class="btn-small black" id="start">Los gehts!</button>
+			<button class="btn-small red" id="buyRed">Kaufe</button>
+			<button class="btn-small red" id="sellRed">Verkaufe</button>
+			<button class="btn-small blue" id="buyBlue">Kaufe</button>
+			<button class="btn-small blue" id="sellBlue">Verkaufe</button>
+			<button class="btn-small" id="buyGreen">Kaufe</button>
+			<button class="btn-small" id="sellGreen">Verkaufe</button>
+			<button class="btn-small orange" id="buyOrange">Kaufe</button>
+			<button class="btn-small orange" id="sellOrange">Verkaufe</button>
+		</div>
+		<div class="col s2"></div>
+	</div>
+	<script>
+
+
+		var timeFormat = 'YYYY';
+
+		yearOrigin = -60;
+		year = 0;
+		function newDate(years) {
+			return moment().add(yearOrigin+ year++, 'year').toDate();
+		}
+
+		var active = false;
+		var sharesBlue = 0, sharesRed = 0, sharesOrange = 0, sharesGreen = 0;
+		var value = 0;
+		var money = 1000;
+
+		var blue = [1,2,3,4,5,6,7,8,9,10,14,12,17,19,25,24,21,26,30,31,32,33,35];
+
+		var red = [1,2,3,4,5,6,7,10,15,23,20,18,21,25,26,24,22,24,22,22,23,25,27];
+
+		var green = [14,3,4,7,1,66,4, 3, 4,5,6,7,8,9,10,11,12,14,15,16,17,18,19,20];
+
+		var orange = [5,3,6,4,7,5,4,5,7,5,6,5,6,5,6,5,8,10,12,14,15,13,15,13,12]
+
+		var color = Chart.helpers.color;
+		var basicNumberOfValuesDisplayed = 5;
+		var config = {
+			type: 'line',
+			data: {
+				labels: [
+					newDate(),
+					newDate(),
+					newDate(),// Date Objects
+					newDate(),
+					newDate()
+				],
+				datasets: [{
+					label: 'red',
+					backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
+					borderColor: window.chartColors.red,
+					fill: false,
+					data: red.splice(0, basicNumberOfValuesDisplayed),
+				}, {
+					label: 'blue',
+					backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
+					borderColor: window.chartColors.blue,
+					fill: false,
+					data: blue.splice(0, basicNumberOfValuesDisplayed),
+				}, {
+					label: 'grün',
+					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
+					borderColor: window.chartColors.green,
+					fill: false,
+					data: green.splice(0, basicNumberOfValuesDisplayed),
+				},
+				{
+					label: 'orange',
+					backgroundColor: color(window.chartColors.orange).alpha(0.5).rgbString(),
+					borderColor: window.chartColors.orange,
+					fill: false,
+					data: orange.splice(0, basicNumberOfValuesDisplayed),
+				}
+			]
+			},
+			options: {
+				title: {
+					text: 'Aktienkurs'
+				},
+				scales: {
+					xAxes: [{
+						type: 'time',
+						time: {
+							format: timeFormat,
+							// round: 'day'
+							tooltipFormat: 'll'
+						},
+						scaleLabel: {
+							display: true,
+							labelString: 'Zeit'
+						}
+					}],
+					yAxes: [{
+						scaleLabel: {
+							display: true,
+							labelString: 'Wert'
+						}
+					}]
+				},
+			}
+		};
+
+		window.onload = function() {
+			var ctx = document.getElementById('canvas').getContext('2d');
+			window.sharesChart = new Chart(ctx, config);
+
+		};
+
+		var colorNames = Object.keys(window.chartColors);
+
+		var add = function() {
+			if (config.data.datasets.length > 0) {
+				config.data.labels.push(newDate(config.data.labels.length));
+
+				for (var index = 0; index < config.data.datasets.length; ++index) {
+					if (typeof config.data.datasets[index].data[0] === 'object') {
+						config.data.datasets[index].data.push({
+							x: newDate(),
+							y: randomScalingFactor(),
+						});
+					} else {
+						config.data.datasets[index].data.push(randomScalingFactor());
+					}
+				}
+
+				updateStats();
+				window.sharesChart.update();
+
+				if (year <
+						Math.min(blue.length, red.length, green.length, orange.length) - 1
+						&& active){
+					setTimeout(add,2500);
+				}
+			}
+		}
+
+		var sell = function(col){
+			switch (col) {
+  			case "orange":
+						if (sharesOrange > 0){
+							sharesOrange--;
+							money += orange[year];
+						}
+      			break;
+  			case "blue":
+						if (sharesBlue > 0){
+							sharesBlue--;
+							money += blue[year];
+						}
+				    break;
+  			case "green":
+						if (sharesGreen > 0){
+							sharesGreen--;
+							money += green[year];
+						}
+						break;
+				case "red":
+						if (sharesRed > 0){
+							sharesRed--;
+							money += red[year];
+						}
+		}
+		updateStats();
+	}
+
+		var buy = function(col){
+			switch (col) {
+				case "orange":
+						if (money >= orange[year]){
+							sharesOrange++;
+							money -= orange[year];
+						}
+						break;
+				case "blue":
+						if (money >= blue[year]){
+							sharesBlue++;
+							money -= blue[year];
+						}
+						break;
+				case "green":
+						if (money >= green[year]){
+							sharesGreen++;
+							money -= green[year];
+						}
+						break;
+				case "red":
+						if (money >= red[year]){
+							sharesRed++;
+							money -= red[year];
+						}
+		}
+		updateStats();
+	}
+
+		var updateStats = function(){
+			document.getElementById('money').innerHTML = money;
+			document.getElementById('shares-red').innerHTML = sharesRed;
+			document.getElementById('shares-blue').innerHTML = sharesBlue;
+			document.getElementById('shares-green').innerHTML = sharesGreen;
+			document.getElementById('shares-orange').innerHTML = sharesOrange;
+
+			var sharesValue =   sharesRed * red[year]
+									+ sharesGreen  * green[year]
+									+ sharesBlue   * blue[year]
+									+ sharesOrange * orange[year];
+
+			document.getElementById('shares-value').innerHTML = sharesValue;
+		}
+
+		document.getElementById('start').addEventListener('click', function(){
+			if (document.getElementById('start').innerHTML == 'Los gehts!'){
+				active = true;
+				add();
+				document.getElementById('start').innerHTML = 'Pause'
+			}
+			else {
+				active = false;
+				document.getElementById('start').innerHTML = 'Los gehts!'
+			}
+
+		});
+
+		document.getElementById('buyBlue').addEventListener('click', function(){buy('blue')});
+		document.getElementById('buyRed').addEventListener('click', function(){buy('red')});
+		document.getElementById('buyGreen').addEventListener('click', function(){buy('green')});
+		document.getElementById('buyOrange').addEventListener('click', function(){buy('orange')});
+
+		document.getElementById('sellBlue').addEventListener('click', function(){sell('blue')});
+		document.getElementById('sellRed').addEventListener('click', function(){sell('red')});
+		document.getElementById('sellGreen').addEventListener('click', function(){sell('green')});
+		document.getElementById('sellOrange').addEventListener('click', function(){sell('orange')});
+
+
+	</script>
+</body>
+
+</html>
