@@ -160,14 +160,23 @@
 				config.data.labels.push(newDate(config.data.labels.length));
 
 				for (var index = 0; index < config.data.datasets.length; ++index) {
-					if (typeof config.data.datasets[index].data[0] === 'object') {
-						config.data.datasets[index].data.push({
-							x: newDate(),
-							y: randomScalingFactor(),
-						});
-					} else {
-						config.data.datasets[index].data.push(randomScalingFactor());
-					}
+                        switch (index){
+                            case 0:
+                    			config.data.datasets[index].data.push(red[year]);
+                                break;
+                                
+                            case 1:
+                     			config.data.datasets[index].data.push(blue[year]);                               
+                                break;
+                            
+                            case 2:
+                    			config.data.datasets[index].data.push(green[year]);                                
+                                break;
+                                
+                            case 3:
+                                config.data.datasets[index].data.push(orange[year]);
+                        }
+
 				}
 
 				updateStats();
