@@ -9,8 +9,7 @@
 	<!-- Compiled and minified JavaScript -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 
-	<script src="utils.js"></script>
-	<style>
+    <style>
 		canvas {
 			-moz-user-select: none;
 			-webkit-user-select: none;
@@ -74,6 +73,15 @@
 		var orange = [5,3,6,4,7,5,4,5,7,5,6,5,6,5,6,5,8,10,12,14,15,13,15,13,12]
 
 		var color = Chart.helpers.color;
+        
+        var chartColors = {
+            red: 'rgb(255, 99, 132)',
+            orange: 'rgb(255, 159, 64)',
+            green: 'rgb(75, 192, 192)',
+            blue: 'rgb(54, 162, 235)'
+        };
+
+        
 		var basicNumberOfValuesDisplayed = 5;
 		var config = {
 			type: 'line',
@@ -87,27 +95,27 @@
 				],
 				datasets: [{
 					label: 'red',
-					backgroundColor: color(window.chartColors.red).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.red,
+					backgroundColor: color(chartColors.red).alpha(0.5).rgbString(),
+					borderColor: chartColors.red,
 					fill: false,
 					data: red.splice(0, basicNumberOfValuesDisplayed),
 				}, {
 					label: 'blue',
-					backgroundColor: color(window.chartColors.blue).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.blue,
+					backgroundColor: color(chartColors.blue).alpha(0.5).rgbString(),
+					borderColor: chartColors.blue,
 					fill: false,
 					data: blue.splice(0, basicNumberOfValuesDisplayed),
 				}, {
 					label: 'grün',
-					backgroundColor: color(window.chartColors.green).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.green,
+					backgroundColor: color(chartColors.green).alpha(0.5).rgbString(),
+					borderColor: chartColors.green,
 					fill: false,
 					data: green.splice(0, basicNumberOfValuesDisplayed),
 				},
 				{
 					label: 'orange',
-					backgroundColor: color(window.chartColors.orange).alpha(0.5).rgbString(),
-					borderColor: window.chartColors.orange,
+					backgroundColor: color(chartColors.orange).alpha(0.5).rgbString(),
+					borderColor: chartColors.orange,
 					fill: false,
 					data: orange.splice(0, basicNumberOfValuesDisplayed),
 				}
@@ -143,10 +151,9 @@
 		window.onload = function() {
 			var ctx = document.getElementById('canvas').getContext('2d');
 			window.sharesChart = new Chart(ctx, config);
-
 		};
 
-		var colorNames = Object.keys(window.chartColors);
+
 
 		var add = function() {
 			if (config.data.datasets.length > 0) {
