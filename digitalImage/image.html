@@ -1,0 +1,108 @@
+<!doctype html>
+<html>
+
+<head>
+	<title>Digitalisierung</title>
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+
+</head>
+    <style>
+
+    </style>
+
+<body>
+
+    
+	<div class="container" style="margin-left:1em; margin-top:4em;">
+    <canvas id="original" width="512" height="512"> </canvas>
+        <div class="row">
+            <div class="col s3">Zeitdiskretisierung:</div>
+            <div class="col s9">
+                <button id="eval-btn" class="btn-small" onclick="zeit(512)">512</button>
+                <button id="eval-btn" class="btn-small" onclick="zeit(256)">256</button>
+                <button id="eval-btn" class="btn-small" onclick="zeit(128)">128</button>
+                <button id="eval-btn" class="btn-small" onclick="zeit(64)">64</button>
+                <button id="eval-btn" class="btn-small" onclick="zeit(32)">32</button>
+                <button id="eval-btn" class="btn-small" onclick="zeit(16)">16</button>
+                <button id="eval-btn" class="btn-small" onclick="zeit(8)">8</button>
+                <button id="eval-btn" class="btn-small" onclick="zeit(4)">4</button>                  
+            </div>
+        </div>
+        <div class="row">
+            <div class="col s3">Wertdiskretisierung:</div>
+            <div class="col s9">
+                <button id="eval-btn" class="btn-small" onclick="wert(128)">2 Mio.</button>
+                <button id="eval-btn" class="btn-small" onclick="wert(64)">262.144</button>
+                <button id="eval-btn" class="btn-small" onclick="wert(32)">32.768</button>
+                <button id="eval-btn" class="btn-small" onclick="wert(16)">4096</button>
+                <button id="eval-btn" class="btn-small" onclick="wert(8)">512</button>
+                <button id="eval-btn" class="btn-small" onclick="wert(4)">64</button>
+                <button id="eval-btn" class="btn-small" onclick="wert(2)">8</button>              
+            </div>
+        </div>
+
+
+    <script>
+        var zeitD = 512, zeitW = 512;
+        var original;
+        
+        window.onload = function(){
+            var c = document.getElementById("original");
+            var ctx = c.getContext("2d");
+            var img = new Image();  
+
+            img.onload = function(){   
+                ctx.drawImage(img, 0, 0);
+                original = ctx.getImageData(0,0,c.width, c.height);
+            }
+            img.src = "img.jpg";
+
+            diskretisiere()
+        }
+        
+        
+        var diskretisiere = function(){            
+            var c = document.getElementById("original");
+            var ctx = c.getContext("2d");
+            var target = ctx.createImageData(c.width, c.height);
+            var stepSize = c.width / zeitD;
+            var rowOriginal = 0, colOriginal = 0;
+            for (var row = 0; row < c.height; row++){
+                for (var col = 0; col < c.width; col++){
+                    //r                    
+                    target.data[4*(row*c.width+col)] = original[4*(rowOriginal*c.width+colOriginal)]
+                    //g
+                    target.data[4*(row*c.width+col)+1] = original[4*(rowOriginal*c.width+colOriginal)+1]
+                    //b
+                    target.data[4*(row*c.width+col)+2] = original[4*(rowOriginal*c.width+colOriginal)+2]                    
+                    //alpha
+                    target.data[4*(row*c.width+col)+3] = original[4*(rowOriginal*c.width+colOriginal)+3]
+                    
+                    if (col != 0 && col % stepSize == 0){
+                        colOriginal = (colOriginal+stepSize) % c.width
+                    }
+                }
+                if (row != 0 && row % stepSize == 0){
+                        rowOriginal = (rowOriginal+stepSize) % c.height
+                    }
+            }
+            
+        }
+        
+        
+        var zeit = function (n){
+            zeitD = n;
+            diskretisiere();
+        }
+        
+        var wert = function(n){
+            zeitW = n;   
+            diskretisiere();
+        }
+        
+	</script>
+</body>
+
+</html>
