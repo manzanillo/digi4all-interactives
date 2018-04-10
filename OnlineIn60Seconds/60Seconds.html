@@ -19,6 +19,9 @@
             font-weight: bold;
             margin-left: 5px;
         }
+
+				.red-connect { background: red !important; }
+				.green-connect { background: green !important; }
     </style>
 
 <body>
@@ -177,6 +180,13 @@ var eval = function(){
     var ytValue = ytSlider.noUiSlider.get().replace(".",'').replace(".",'');
     var glValue = glSlider.noUiSlider.get().replace(".",'').replace(".",'');
 
+		var facebookValueDesired = 300000;
+		var twitterValueDesired = 350000;
+    var wikiValueDesired = 600;
+    var ytValueDesired = 4125000;
+    var glValueDesired = 3500000;
+
+
     fbSlider.noUiSlider.destroy();
     twSlider.noUiSlider.destroy();
     wikiSlider.noUiSlider.destroy();
@@ -185,7 +195,8 @@ var eval = function(){
 
 
     noUiSlider.create(fbSlider, {
-            start: [Math.min(facebookValue, 300000), Math.max(facebookValue, 300000)],
+            start: [Math.min(facebookValue, facebookValueDesired),
+										Math.max(facebookValue, facebookValueDesired)],
             tooltips: true,
             connect: true,
             step: 1,
@@ -201,7 +212,8 @@ var eval = function(){
         });
 
     noUiSlider.create(twSlider, {
-            start: [Math.min(twitterValue, 350000), Math.max(twitterValue, 350000)],
+            start: [Math.min(twitterValue, twitterValueDesired),
+										Math.max(twitterValue, twitterValueDesired)],
             tooltips: true,
             connect: true,
             step: 1,
@@ -219,7 +231,8 @@ var eval = function(){
 
 
     noUiSlider.create(wikiSlider, {
-            start: [Math.min(wikiValue, 600), Math.max(wikiValue, 600)],
+            start: [Math.min(wikiValue, wikiValueDesired),
+										Math.max(wikiValue, wikiValueDesired)],
             tooltips: true,
             connect: true,
             step: 1,
@@ -236,7 +249,8 @@ var eval = function(){
 
 
     noUiSlider.create(ytSlider, {
-            start: [Math.min(ytValue, 3800000), Math.max(ytValue, 3000000)],
+            start: [Math.min(ytValue, ytValueDesired),
+										Math.max(ytValue, ytValueDesired)],
             tooltips: true,
             connect: true,
             step: 1,
@@ -253,7 +267,8 @@ var eval = function(){
 
 
     noUiSlider.create(glSlider, {
-            start: [Math.min(glValue, 3800000), Math.max(glValue, 3800000)],
+            start: [Math.min(glValue, glValueDesired),
+										Math.max(glValue, glValueDesired)],
             tooltips: true,
             connect: true,
             step: 1,
@@ -274,6 +289,25 @@ var eval = function(){
 				ytSlider.setAttribute('disabled', true);
 				glSlider.setAttribute('disabled', true);
 
+				var connect = fbSlider.querySelectorAll('.noUi-connect');
+				facebookValue < facebookValueDesired ? connect[0].classList.add('red-connect')
+				  							: connect[0].classList.add('green-connect');
+
+				connect = twSlider.querySelectorAll('.noUi-connect');
+				twitterValue < twitterValueDesired ? connect[0].classList.add('red-connect')
+											 : connect[0].classList.add('green-connect');
+
+				connect = wikiSlider.querySelectorAll('.noUi-connect');
+				wikiValue < wikiValueDesired ? connect[0].classList.add('red-connect')
+										: connect[0].classList.add('green-connect');
+
+				connect = ytSlider.querySelectorAll('.noUi-connect');
+				ytValue < ytValueDesired ? connect[0].classList.add('red-connect')
+									: connect[0].classList.add('green-connect');
+
+				connect = glSlider.querySelectorAll('.noUi-connect');
+				glValue < glValueDesired ? connect[0].classList.add('red-connect')
+												: connect[0].classList.add('green-connect');
 
 }
 	</script>
