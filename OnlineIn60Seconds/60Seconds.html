@@ -82,7 +82,6 @@ http://www.dailyinfographic.com/what-happens-internet-in-60-seconds
 		      '70%': [  1000000 ],
 		      'max': [  10000000 ]
             }, format: wNumb({
-		          decimals: 3,
 		          thousand: '.',
                 })
         });
@@ -101,7 +100,6 @@ http://www.dailyinfographic.com/what-happens-internet-in-60-seconds
 		      '70%': [  1000000 ],
 		      'max': [ 5000000 ]
             }, format: wNumb({
-		          decimals: 3,
 		          thousand: '.',
                 })
         });
@@ -121,7 +119,6 @@ http://www.dailyinfographic.com/what-happens-internet-in-60-seconds
 		      '70%': [  100 ],
 		      'max': [ 1000 ]
             }, format: wNumb({
-		          decimals: 3,
 		          thousand: '.',
                 })
         });
@@ -140,7 +137,6 @@ http://www.dailyinfographic.com/what-happens-internet-in-60-seconds
 		      '70%': [  1000000 ],
 		      'max': [  10000000 ]
             }, format: wNumb({
-		          decimals: 3,
 		          thousand: '.',
                 })
         });
@@ -160,7 +156,6 @@ http://www.dailyinfographic.com/what-happens-internet-in-60-seconds
 		      '70%': [  1000000 ],
 		      'max': [  10000000 ]
             }, format: wNumb({
-		          decimals: 3,
 		          thousand: '.',
                 })
         });
@@ -176,11 +171,11 @@ var eval = function(){
     var ytSlider = document.getElementById('youtube');
     var glSlider = document.getElementById('google');
 
-    var facebookValue = fbSlider.noUiSlider.get();
-    var twitterValue = twSlider.noUiSlider.get();
-    var wikiValue = wikiSlider.noUiSlider.get();
-    var ytValue = ytSlider.noUiSlider.get();
-    var glValue = glSlider.noUiSlider.get();
+    var facebookValue = fbSlider.noUiSlider.get().replace(".",'').replace(".",'');
+    var twitterValue = twSlider.noUiSlider.get().replace(".",'').replace(".",'');
+    var wikiValue = wikiSlider.noUiSlider.get().replace(".",'').replace(".",'');
+    var ytValue = ytSlider.noUiSlider.get().replace(".",'').replace(".",'');
+    var glValue = glSlider.noUiSlider.get().replace(".",'').replace(".",'');
 
     fbSlider.noUiSlider.destroy();
     twSlider.noUiSlider.destroy();
@@ -188,8 +183,9 @@ var eval = function(){
     ytSlider.noUiSlider.destroy();
     glSlider.noUiSlider.destroy();
 
+
     noUiSlider.create(fbSlider, {
-            start: [facebookValue, 300000],
+            start: [Math.min(facebookValue, 300000), Math.max(facebookValue, 300000)],
             tooltips: true,
             connect: true,
             step: 1,
@@ -200,13 +196,12 @@ var eval = function(){
 		      '70%': [  1000000 ],
 		      'max': [  10000000 ]
             }, format: wNumb({
-		          decimals: 3,
 		          thousand: '.',
                 })
         });
 
     noUiSlider.create(twSlider, {
-            start: [twitterValue, 350000],
+            start: [Math.min(twitterValue, 350000), Math.max(twitterValue, 350000)],
             tooltips: true,
             connect: true,
             step: 1,
@@ -217,7 +212,6 @@ var eval = function(){
 		      '70%': [  1000000 ],
 		      'max': [ 5000000 ]
             }, format: wNumb({
-		          decimals: 3,
 		          thousand: '.',
                 })
         });
@@ -225,7 +219,7 @@ var eval = function(){
 
 
     noUiSlider.create(wikiSlider, {
-            start: [wikiValue, 600],
+            start: [Math.min(wikiValue, 600), Math.max(wikiValue, 600)],
             tooltips: true,
             connect: true,
             step: 1,
@@ -236,14 +230,13 @@ var eval = function(){
 		      '70%': [  100 ],
 		      'max': [ 1000 ]
             }, format: wNumb({
-		          decimals: 3,
 		          thousand: '.',
                 })
         });
 
 
     noUiSlider.create(ytSlider, {
-            start: [ytValue, 3000000],
+            start: [Math.min(ytValue, 3800000), Math.max(ytValue, 3000000)],
             tooltips: true,
             connect: true,
             step: 1,
@@ -254,14 +247,13 @@ var eval = function(){
 		      '70%': [  1000000 ],
 		      'max': [  10000000 ]
             }, format: wNumb({
-		          decimals: 3,
 		          thousand: '.',
                 })
         });
 
 
     noUiSlider.create(glSlider, {
-            start: [glValue, 3800000],
+            start: [Math.min(glValue, 3800000), Math.max(glValue, 3800000)],
             tooltips: true,
             connect: true,
             step: 1,
@@ -272,10 +264,16 @@ var eval = function(){
 		      '70%': [  1000000 ],
 		      'max': [  10000000 ]
             }, format: wNumb({
-		          decimals: 3,
 		          thousand: '.',
                 })
         });
+
+				fbSlider.setAttribute('disabled', true);
+				twSlider.setAttribute('disabled', true);
+				wikiSlider.setAttribute('disabled', true);
+				ytSlider.setAttribute('disabled', true);
+				glSlider.setAttribute('disabled', true);
+
 
 }
 	</script>
