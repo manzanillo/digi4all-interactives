@@ -166,36 +166,73 @@ DEALINGS IN THE SOFTWARE.
 <body>
     <div class="indicator indicator-left">digital</div>
     <div id="container">
-    <div class="card" style="display: block;">
+    <div class="card" style="display: block;" data-sol="analog">
         <div class="icon"  style="display: block; background-image: url(media/kassette.jpg)">
             <div class="description">Kassette</div>
         </div>
     </div>
-    <div class="card">
+    <div class="card" data-sol="digital">
         <div class="icon" style="display: block; background-image: url(media/abakus.jpg)">
             <div class="description">Abakus</div>
         </div>
     </div>  
-    <div class="card">
+    <div class="card" data-sol="digital">
         <div class="icon" style="display: block; background-image: url(media/CD.jpg)">
             <div class="description">CD</div>        
         </div>
+    </div>
+    <div class="card" data-sol="analog">
+        <div class="icon" style="display: block; background-image: url(media/Taschenuhr.jpg)">
+            <div class="description">Taschenuhr</div>        
+        </div>
     </div>  
-    <div class="card">
+        
+    <div class="card" data-sol="digital">
         <div class="icon" style="display: block; background-image: url(media/druckschrift.jpg)">
             <div class="description">Druckschrift</div>        
         </div>
     </div>  
-    <div class="card">
+    <div class="card" data-sol="analog">
         <div class="icon" style="display: block; background-image: url(media/handschrift.jpg)">
             <div class="description">Handschrift</div>            
         </div>
     </div>  
-    <div class="card">
+    <div class="card" data-sol="analog">
         <div class="icon" style="display: block; background-image: url(media/filmrolle.jpg)">
             <div class="description">Filmrolle</div>            
         </div>
     </div>
+    <div class="card" data-sol="analog">
+        <div class="icon" style="display: block; background-image: url(media/SWPhoto.jpg)">
+            <div class="description">Photo aus den 30ern</div>            
+        </div>
+    </div>
+    <div class="card" data-sol="analog">
+        <div class="icon" style="display: block; background-image: url(media/Radio.jpg)">
+            <div class="description">Radio</div>            
+        </div>
+    </div>
+    <div class="card" data-sol="analog">
+        <div class="icon" style="display: block; background-image: url(media/Grammophon.jpg)">
+            <div class="description">Grammophon</div>            
+        </div>
+    </div>
+    <div class="card" data-sol="digital">
+        <div class="icon" style="display: block; background-image: url(media/Zahlen.jpg)">
+            <div class="description">Zahlen</div>            
+        </div>
+    </div>
+    <div class="card" data-sol="digital">
+        <div class="icon" style="display: block; background-image: url(media/schreibmaschine.jpg)">
+            <div class="description">Schreibmaschine</div>            
+        </div>
+    </div>
+    <div class="card" data-sol="digital">
+        <div class="icon" style="display: block; background-image: url(media/PC.jpg)">
+            <div class="description">PC</div>            
+        </div>
+    </div>
+        
     </div>
     <div class="indicator indicator-right">analog</div>
 
@@ -205,7 +242,6 @@ DEALINGS IN THE SOFTWARE.
     </div>
 
     <script>
-        var solution = ['analog', 'analog', 'digital', 'digital', 'analog', 'analog'];
         var correct = 0;
         var incorrect = 0;
         
@@ -218,7 +254,7 @@ DEALINGS IN THE SOFTWARE.
                 $(this).addClass('rotate-left').delay(1400).fadeOut(2);
                 $('.card').find('.status').remove();
 
-                if (solution[correct+incorrect] == 'analog'){
+                if ($(this).attr('data-sol') == 'analog'){ //(solution[correct+incorrect] == 'analog'){
                     correct ++;
                     $('#correct').html(correct);
                 }
@@ -245,7 +281,7 @@ DEALINGS IN THE SOFTWARE.
                 $('.card').find('.status').remove();
                 $(this).append('<div class="status dislike">Digital!</div>');
                 
-                if (solution[correct+incorrect] == 'digital'){
+                if ($(this).attr('data-sol') == 'digital'){
                     correct ++;
                     $('#correct').html(correct);
                 }
