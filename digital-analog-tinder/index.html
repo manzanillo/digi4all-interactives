@@ -1,0 +1,306 @@
+<!doctype html>
+<html>
+<!--
+
+Copyright (c) 2018 - manzanillo - based on https://codepen.io/developingidea/pen/meAIn
+
+Permission is hereby granted, free of charge, to any person 
+obtaining a copy of this software and associated documentation 
+files (the "Software"), to deal in the Software without restriction,
+ including without limitation the rights to use, copy, modify, 
+merge, publish, distribute, sublicense, and/or sell copies of 
+the Software, and to permit persons to whom the Software is 
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall 
+be included in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, 
+EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES 
+OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND 
+NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT 
+HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, 
+WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, 
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER 
+DEALINGS IN THE SOFTWARE.
+
+-->
+    
+    
+<head>
+	<title>Digital-Analog Tinder</title>
+    <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
+    <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
+    <script src="https://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+    
+<style>      
+#container {
+    width: 500px;
+    margin: auto !important;
+    display: block;
+    height: 500px;
+    position: relative;
+    list-style-type: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.card {
+    display: none;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+    color: #fff;
+    padding: 20px;
+    width: 360px;
+    height: 360px;
+    top: 50px;
+    left: 50px;
+    position: absolute;
+    cursor: hand;
+}
+.rotate-left {
+    transform: rotate(30deg) scale(0.8);
+    transition: 2s;
+    margin-left: 400px;
+    cursor: e-resize;
+    opacity: 0;
+    z-index: 10;
+}
+.rotate-right {
+    transform: rotate(-30deg) scale(0.8);
+    transition: 2s;
+    opacity: 0;
+    margin-left: -400px;
+    cursor: w-resize;
+    z-index: 10;
+}
+.icon
+    {
+    background: #222;
+    width: 340px;
+    height: 340px;
+    display: block;
+    margin-top: 10px;
+    margin-left: 10px;
+    background-size: auto 100% !important;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+.like {
+    border-radius: 5px;
+    padding: 5px 10px;
+    border: 3px solid white;
+    color: white;
+    text-transform: uppercase;
+    font-size: 20px;
+    position: absolute;
+    top: 50px;
+    right: 40px;
+    text-shadow: none;
+}
+.dislike {
+    border-radius: 5px;
+    padding: 5px 10px;
+    border: 3px solid white;
+    color: white;
+    text-transform: uppercase;
+    font-size: 20px;
+    position: absolute;
+    top: 50px;
+    left: 40px;
+    text-shadow: none;
+}
+    
+.result {
+    text-align: center;
+    font-size: 40px;
+}
+    
+.description {
+    position: absolute;
+    bottom: 40px;
+    left: 40px;
+    font-weight: 70;
+    font-size: 120%;
+    letter-spacing: 1px;
+}
+
+.message {
+    position: absolute;
+    text-align: center;
+    top: 10%;
+    left: 40%;
+    font-size: 300%;
+    font-weight: 75;
+    color: darkgray;
+    }
+    
+.indicator {
+    color: darkgray;
+    position: absolute;
+    font-size: 200%;
+    font-weight: 75;
+    
+}
+    
+.indicator-left {
+    transform: rotate(-90deg);
+    top: 25%
+        
+}
+.indicator-right {
+    transform: rotate(90deg);
+    top: 26%;
+    right: 0;
+}
+   
+    
+</style>
+
+<body>
+    <div class="indicator indicator-left">digital</div>
+    <div id="container">
+    <div class="card" style="display: block;" data-sol="analog">
+        <div class="icon"  style="display: block; background-image: url(media/kassette.jpg)">
+            <div class="description">Kassette</div>
+        </div>
+    </div>
+    <div class="card" data-sol="digital">
+        <div class="icon" style="display: block; background-image: url(media/abakus.jpg)">
+            <div class="description">Abakus</div>
+        </div>
+    </div>  
+    <div class="card" data-sol="digital">
+        <div class="icon" style="display: block; background-image: url(media/CD.jpg)">
+            <div class="description">CD</div>        
+        </div>
+    </div>
+    <div class="card" data-sol="analog">
+        <div class="icon" style="display: block; background-image: url(media/Taschenuhr.jpg)">
+            <div class="description">Taschenuhr</div>        
+        </div>
+    </div>  
+        
+    <div class="card" data-sol="digital">
+        <div class="icon" style="display: block; background-image: url(media/druckschrift.jpg)">
+            <div class="description">Druckschrift</div>        
+        </div>
+    </div>  
+    <div class="card" data-sol="analog">
+        <div class="icon" style="display: block; background-image: url(media/handschrift.jpg)">
+            <div class="description">Handschrift</div>            
+        </div>
+    </div>  
+    <div class="card" data-sol="analog">
+        <div class="icon" style="display: block; background-image: url(media/filmrolle.jpg)">
+            <div class="description">Filmrolle</div>            
+        </div>
+    </div>
+    <div class="card" data-sol="analog">
+        <div class="icon" style="display: block; background-image: url(media/SWPhoto.jpg)">
+            <div class="description">Photo aus den 30ern</div>            
+        </div>
+    </div>
+    <div class="card" data-sol="analog">
+        <div class="icon" style="display: block; background-image: url(media/Radio.jpg)">
+            <div class="description">Radio</div>            
+        </div>
+    </div>
+    <div class="card" data-sol="analog">
+        <div class="icon" style="display: block; background-image: url(media/Grammophon.jpg)">
+            <div class="description">Grammophon</div>            
+        </div>
+    </div>
+    <div class="card" data-sol="digital">
+        <div class="icon" style="display: block; background-image: url(media/Zahlen.jpg)">
+            <div class="description">Zahlen</div>            
+        </div>
+    </div>
+    <div class="card" data-sol="digital">
+        <div class="icon" style="display: block; background-image: url(media/schreibmaschine.jpg)">
+            <div class="description">Schreibmaschine</div>            
+        </div>
+    </div>
+    <div class="card" data-sol="digital">
+        <div class="icon" style="display: block; background-image: url(media/PC.jpg)">
+            <div class="description">PC</div>            
+        </div>
+    </div>
+        
+    </div>
+    <div class="indicator indicator-right">analog</div>
+
+    <div class="result">
+        <div>  <i class="material-icons">done </i>  <span id="correct">0</span>    </div>
+        <div>  <i class="material-icons">clear</i>  <span id="incorrect">0</span>  </div>
+    </div>
+
+    <script>
+        var correct = 0;
+        var incorrect = 0;
+        
+        $(document).ready(function(){
+            
+            $(".card").on("swiperight", function(){
+                if ($('.rotate-left:visible').length || $('.rotate-right:visible').length) {
+                    return;
+                }
+                $(this).addClass('rotate-left').delay(1400).fadeOut(2);
+                $('.card').find('.status').remove();
+
+                if ($(this).attr('data-sol') == 'analog'){ //(solution[correct+incorrect] == 'analog'){
+                    correct ++;
+                    $('#correct').html(correct);
+                }
+                else {
+                    incorrect++;
+                    $('#incorrect').html(incorrect);
+                }
+                
+                
+                $(this).append('<div class="status like">Analog!</div>');      
+                if ( $(this).is(':last-child') ) {
+                    $('#container').html('<div class="message>Ende</div>')
+                } else {
+                    $(this).next().removeClass('rotate-left rotate-right').fadeIn(400);
+                }
+            });  
+
+            
+            $(".card").on("swipeleft", function(){                
+                if ($('.rotate-left:visible').length || $('.rotate-right:visible').length) {
+                    return;
+                }
+                $(this).addClass('rotate-right').delay(1400).fadeOut(2);
+                $('.card').find('.status').remove();
+                $(this).append('<div class="status dislike">Digital!</div>');
+                
+                if ($(this).attr('data-sol') == 'digital'){
+                    correct ++;
+                    $('#correct').html(correct);
+                }
+                else {
+                    incorrect++;
+                    $('#incorrect').html(incorrect);
+                }
+                
+                if ( $(this).is(':last-child') ) {
+                    $('#container').html('<div class="message">Ende</div>')
+                 } else {
+                    $(this).next().removeClass('rotate-left rotate-right').fadeIn(400);
+                } 
+           });
+
+        });
+
+
+                
+    </script>
+    </body>
+</html>
