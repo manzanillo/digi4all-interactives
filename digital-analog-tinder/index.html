@@ -30,138 +30,13 @@ DEALINGS IN THE SOFTWARE.
 <head>
 	<title>Digital-Analog Tinder</title>
     <link rel="stylesheet" href="https://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.css">
+    <link rel="stylesheet" href="css/digital-analog.css">
+
     <script src="https://code.jquery.com/jquery-1.11.1.min.js"></script>
     <script src="https://code.jquery.com/mobile/1.4.4/jquery.mobile-1.4.4.min.js"></script>
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
-    
-<style>      
-#container {
-    width: 500px;
-    margin: auto !important;
-    display: block;
-    height: 500px;
-    position: relative;
-    list-style-type: none;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-.card {
-    display: none;
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    color: #fff;
-    padding: 20px;
-    width: 360px;
-    height: 360px;
-    top: 50px;
-    left: 50px;
-    position: absolute;
-    cursor: hand;
-}
-.rotate-left {
-    transform: rotate(30deg) scale(0.8);
-    transition: 2s;
-    margin-left: 400px;
-    cursor: e-resize;
-    opacity: 0;
-    z-index: 10;
-}
-.rotate-right {
-    transform: rotate(-30deg) scale(0.8);
-    transition: 2s;
-    opacity: 0;
-    margin-left: -400px;
-    cursor: w-resize;
-    z-index: 10;
-}
-.icon
-    {
-    background: #222;
-    width: 340px;
-    height: 340px;
-    display: block;
-    margin-top: 10px;
-    margin-left: 10px;
-    background-size: auto 100% !important;
-    background-position: center;
-    background-repeat: no-repeat;
-}
-.like {
-    border-radius: 5px;
-    padding: 5px 10px;
-    border: 3px solid white;
-    color: white;
-    text-transform: uppercase;
-    font-size: 20px;
-    position: absolute;
-    top: 50px;
-    right: 40px;
-    text-shadow: none;
-}
-.dislike {
-    border-radius: 5px;
-    padding: 5px 10px;
-    border: 3px solid white;
-    color: white;
-    text-transform: uppercase;
-    font-size: 20px;
-    position: absolute;
-    top: 50px;
-    left: 40px;
-    text-shadow: none;
-}
-    
-.result {
-    text-align: center;
-    font-size: 40px;
-}
-    
-.description {
-    position: absolute;
-    bottom: 40px;
-    left: 40px;
-    font-weight: 70;
-    font-size: 120%;
-    letter-spacing: 1px;
-}
 
-.message {
-    position: absolute;
-    text-align: center;
-    top: 10%;
-    left: 40%;
-    font-size: 300%;
-    font-weight: 75;
-    color: darkgray;
-    }
-    
-.indicator {
-    color: darkgray;
-    position: absolute;
-    font-size: 200%;
-    font-weight: 75;
-    
-}
-    
-.indicator-left {
-    transform: rotate(-90deg);
-    top: 25%
-        
-}
-.indicator-right {
-    transform: rotate(90deg);
-    top: 26%;
-    right: 0;
-}
-   
-    
-</style>
 
 <body>
     <div class="indicator indicator-left">digital</div>
@@ -241,66 +116,6 @@ DEALINGS IN THE SOFTWARE.
         <div>  <i class="material-icons">clear</i>  <span id="incorrect">0</span>  </div>
     </div>
 
-    <script>
-        var correct = 0;
-        var incorrect = 0;
-        
-        $(document).ready(function(){
-            
-            $(".card").on("swiperight", function(){
-                if ($('.rotate-left:visible').length || $('.rotate-right:visible').length) {
-                    return;
-                }
-                $(this).addClass('rotate-left').delay(1400).fadeOut(2);
-                $('.card').find('.status').remove();
-
-                if ($(this).attr('data-sol') == 'analog'){ //(solution[correct+incorrect] == 'analog'){
-                    correct ++;
-                    $('#correct').html(correct);
-                }
-                else {
-                    incorrect++;
-                    $('#incorrect').html(incorrect);
-                }
-                
-                
-                $(this).append('<div class="status like">Analog!</div>');      
-                if ( $(this).is(':last-child') ) {
-                    $('#container').html('<div class="message>Ende</div>')
-                } else {
-                    $(this).next().removeClass('rotate-left rotate-right').fadeIn(400);
-                }
-            });  
-
-            
-            $(".card").on("swipeleft", function(){                
-                if ($('.rotate-left:visible').length || $('.rotate-right:visible').length) {
-                    return;
-                }
-                $(this).addClass('rotate-right').delay(1400).fadeOut(2);
-                $('.card').find('.status').remove();
-                $(this).append('<div class="status dislike">Digital!</div>');
-                
-                if ($(this).attr('data-sol') == 'digital'){
-                    correct ++;
-                    $('#correct').html(correct);
-                }
-                else {
-                    incorrect++;
-                    $('#incorrect').html(incorrect);
-                }
-                
-                if ( $(this).is(':last-child') ) {
-                    $('#container').html('<div class="message">Ende</div>')
-                 } else {
-                    $(this).next().removeClass('rotate-left rotate-right').fadeIn(400);
-                } 
-           });
-
-        });
-
-
-                
-    </script>
+    <script src="js/swipe.js"> </script>
     </body>
 </html>

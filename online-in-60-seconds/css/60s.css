@@ -1,0 +1,8 @@
+.hide {
+    visibility: hidden;
+    font-weight: bold;
+    margin-left: 5px;
+}
+
+.red-connect { background: red !important; }
+.green-connect { background: green !important; }
