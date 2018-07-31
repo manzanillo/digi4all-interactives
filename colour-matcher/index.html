@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- ### Enter your interactive title in the title block ### -->
+    <title>Colour Matcher</title>
+    <link rel="stylesheet" href="../lib/css/normalize.min.css">
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="../lib/css/materialize.min.css" type="text/css" media="screen,projection"/>
+    <script src="../lib/js/modernizr.min.js"></script>
+    <!-- jQuery (necessary for Materialize) -->
+    <script type="text/javascript" src="../lib/js/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="row">
+    <div class="col s12 l8 offset-l2">
+    <!-- ### Start of required HTML for inline interactives ### -->
+    <div class="interactive" id="interactive-colour-matcher">
+      <h2 class="center-align">Farben "matchen"</h2>
+
+      <p>Versuchen Sie die richtige Farbe durch Einstellen der drei Schieberegler zu erzielen.</p>
+
+      <div class="section bordered">
+        <div class="flex-parent">
+          <div class="flex-child-sliders">
+            <h4>24 bit</h4>
+            <div id="interactive-colour-matcher-24-bit-sliders" class="interactive-colour-matcher-sliders">
+              <div>
+                <div><strong>Rot</strong> - 8 bits von Rot sind auf <span class='representation-text'> gesetzt</span></div>
+                <div class="interactive-colour-matcher-slider interactive-colour-matcher-24-bit-slider"></div>
+              </div>
+              <div>
+                <div><strong>Grün</strong> - 8 bits von Grün sind auf <span class='representation-text'> gesetzt</span></div>
+                <div class="interactive-colour-matcher-slider interactive-colour-matcher-24-bit-slider"></div>
+              </div>
+              <div>
+                <div><strong>Blau</strong> - 8 bits von Blau sind auf <span class='representation-text'> gesetzt</span></div>
+            	  <div class="interactive-colour-matcher-slider interactive-colour-matcher-24-bit-slider"></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex-child flex-parent flex-parent-column">
+            <h5>24 bit Farbe</h5>
+            <div class="flex-child interactive-colour-matcher-result" id="interactive-colour-matcher-24-bit-result"></div>
+          </div>
+          <div class="flex-child flex-parent flex-parent-column">
+            <h5>Zielfarbe</h5>
+            <div class="flex-child interactive-colour-matcher-result interactive-colour-matcher-goal"></div>
+          </div>
+        </div>
+
+        <div class="section-representation">
+          <div><strong>Bit-Repräsentation</strong> - Klicken Sie auf ein bit um dessen Wert zu ändern</div>
+          <div id="interactive-colour-matcher-bit-representation-24" class="flex-parent">
+          </div>
+        </div>
+        <div class="section-representation hexidecimal">
+          <div><strong>Hexidecimal representation</strong></div>
+          <div id="interactive-colour-matcher-hexidecimal-representation-24" class='representation-text'></div>
+        </div>
+
+        <p>
+          Brauchen Sie Hilfe?
+        </p>
+        <button id="interactive-colour-matcher-help" type="button" class="btn red">Hilf mir beim setzen von Rot</button>
+      </div>
+
+
+      <p>Versuchen Sie dieselbe Farbe mit 8bit darzustellen.</p>
+
+
+      <div class="section bordered">
+        <div class="flex-parent">
+          <div class="flex-child-sliders">
+            <h4>8 bit</h4>
+            <div id="interactive-colour-matcher-8-bit-sliders" class="interactive-colour-matcher-sliders">
+              <div>
+                <div><strong>Red</strong> - 3 bits von Rot sind auf <span class='representation-text'></span> gesetzt</div>
+                <div class="interactive-colour-matcher-slider interactive-colour-matcher-8-bit-slider"></div>
+              </div>
+              <div>
+                <div><strong>Green</strong> - 3 bits von Grün sind auf <span class='representation-text'></span>gesetzt </div>
+                <div class="interactive-colour-matcher-slider interactive-colour-matcher-8-bit-slider"></div>
+              </div>
+              <div>
+                <div><strong>Blue</strong> - 2 bits von Blau sind auf <span class='representation-text'></span>gesetzt </div>
+                <div class="interactive-colour-matcher-slider interactive-colour-matcher-8-bit-slider"></div>
+              </div>
+            </div>
+          </div>
+          <div class="flex-child flex-parent flex-parent-column">
+            <h5>8 bit Farbe</h5>
+            <div class="flex-child interactive-colour-matcher-result" id="interactive-colour-matcher-8-bit-result"></div>
+          </div>
+          <div class="flex-child flex-parent flex-parent-column">
+            <h5>Zielefarbe</h5>
+            <div class="flex-child interactive-colour-matcher-result interactive-colour-matcher-goal"></div>
+          </div>
+        </div>
+
+        <div class="section-representation">
+          <div><strong>Bit-Representation</strong> - Klicken Sie auf ein bit um dessen Wert zu ändern</div>
+          <div id="interactive-colour-matcher-bit-representation-8" class="flex-parent">
+          </div>
+        </div>
+        <div class="section-representation hexidecimal">
+          <div><strong>Hexidecimal representation</strong></div>
+          <div id="interactive-colour-matcher-hexidecimal-representation-8" class='representation-text'></div>
+        </div>
+      </div>
+
+      <button id="interactive-colour-matcher-reset" type="button" class="btn orange">Versuchen Sie es mit einer anderen Farbe</button>
+
+      <link rel="stylesheet" href="./css/colour-matcher.css">
+      <link rel="stylesheet" href="./css/nouislider.min.css">
+      <script type="text/javascript" src="./js/colour-matcher.js"></script>
+      <script type="text/javascript" src="./js/wNumb.js"></script>
+      <script type="text/javascript" src="./js/nouislider.min.js"></script>
+    </div>
+    <!-- ### End of required HTML for inline interactives ### -->
+    </div>
+    </div>
+
+    <!-- Materialize responsive CSS -->
+    <script type="text/javascript" src="../lib/js/materialize.min.js"></script>
+    </body>
+  </html>
