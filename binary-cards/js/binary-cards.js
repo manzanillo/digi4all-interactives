@@ -193,7 +193,7 @@ function updateBinary(){
     if (!visible) {
         return;
     }
-    var binaryValue = new Array();
+    var binaryValue = [];
 
     $('#interactive-binary-cards-container').children().each(function(cardPosition, card) {
         var card = $(card.children[0]);
@@ -206,8 +206,15 @@ function updateBinary(){
     });
 
     var binary = $('#binary-number');
-
-    binary.html(binaryValue.join(' ') + ' lautet die Binärdarstellung der Zahl');
+    while (binaryValue[0] == 0){
+        binaryValue.shift();
+    }
+    if (binaryValue.length == 0) {
+        binary.html('0 lautet die Binärdarstellung der Zahl');
+    }
+    else {
+        binary.html(binaryValue.join(' ') + ' lautet die Binärdarstellung der Zahl');
+    }
     
 };
 
