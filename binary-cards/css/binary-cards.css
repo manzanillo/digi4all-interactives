@@ -54,7 +54,6 @@
   transform: rotateY(180deg) perspective(25rem);
 }
 #interactive-binary-cards button {
-  border: 1px solid #888;
   height: 2rem;
   line-height: 2rem;
 }
@@ -65,4 +64,8 @@
 #interactive-binary-cards button#flip-to-white {
   background: white;
   color: black;
+}
+
+#binary-number {
+  color: #26a69a;
 }

@@ -1,4 +1,5 @@
 "use strict";
+var visible = false;
 
 $(document).ready(function () {
     // Settings for interactive
@@ -11,18 +12,27 @@ $(document).ready(function () {
     $('#interactive-binary-cards').on('click', '.binary-card', function(event) {
         $(this).toggleClass('flipped');
         updateDotCount();
+        updateBinary();
+        
     });
 
     // Flip all cards to black
     $('#interactive-binary-cards button#flip-to-black').on('click', function(){
         $('#interactive-binary-cards-container > div.binary-card-container > div.binary-card').addClass('flipped');
         updateDotCount();
+        updateBinary();
     });
 
     // Flip all cards to white
     $('#interactive-binary-cards button#flip-to-white').on('click', function(){
         $('#interactive-binary-cards-container > div.binary-card-container > div.binary-card').removeClass('flipped');
         updateDotCount();
+    });
+    
+    
+    $('button#show-binary').on('click', function(){
+        visible = !visible;
+        updateBinary();
     });
 
     // Create cards within container and update count
@@ -177,6 +187,29 @@ function updateDotCount() {
     }
 };
 
+
+//toggle binary Number
+function updateBinary(){
+    if (!visible) {
+        return;
+    }
+    var binaryValue = new Array();
+
+    $('#interactive-binary-cards-container').children().each(function(cardPosition, card) {
+        var card = $(card.children[0]);
+        if (!card.hasClass('flipped')) {
+            binaryValue[cardPosition] = 1;
+        }
+        else {
+            binaryValue[cardPosition] = 0;
+        }
+    });
+
+    var binary = $('#binary-number');
+
+    binary.html(binaryValue.join(' ') + ' lautet die Binärdarstellung der Zahl');
+    
+};
 
 // From jquerybyexample.net/2012/06/get-url-parameters-using-jquery.html
 function getUrlParameter(sParam) {
