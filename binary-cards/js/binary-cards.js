@@ -32,6 +32,12 @@ $(document).ready(function () {
     
     $('button#show-binary').on('click', function(){
         visible = !visible;
+        if (visible){
+            $('button#show-binary').text('Verstecke Binärdarstellung');
+        }
+        else {
+            $('button#show-binary').text('Zeige Binärdarstellung');
+        }
         updateBinary();
     });
 
@@ -93,7 +99,7 @@ function createDots(dots) {
       var gridRowWidth = canvas.height / gridRows;
       var gridCols = sizes[1] + 1;
       var gridColWidth = canvas.width / gridCols;
-      var dotSize = Math.min(gridRowWidth, gridColWidth) * 0.4;
+      var dotSize = 10;//Math.min(gridRowWidth, gridColWidth) * 0.4;
       var dotStartAngle = Math.PI * 0.5;
       var dotFinishAngle = Math.min(Math.PI * 2, Math.PI * 2 * dots) + dotStartAngle;
       for (var row = 1; row < gridRows; row++) {
@@ -190,7 +196,10 @@ function updateDotCount() {
 
 //toggle binary Number
 function updateBinary(){
+    var binary = $('#binary-number');
+
     if (!visible) {
+        binary.html('')
         return;
     }
     var binaryValue = [];
@@ -205,7 +214,6 @@ function updateBinary(){
         }
     });
 
-    var binary = $('#binary-number');
     while (binaryValue[0] == 0){
         binaryValue.shift();
     }
