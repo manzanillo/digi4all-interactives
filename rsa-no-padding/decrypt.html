@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- ### Enter your interactive title in the title block ### -->
+    <title>RSA Encrypter/Decrypter</title>
+    <!--Import materialize.css-->
+    <link rel="stylesheet" href="../lib/css/materialize.min.css" type="text/css" media="screen,projection"/>
+    <!-- jQuery (necessary for Materialize) -->
+    <script type="text/javascript" src="../lib/js/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="row">
+    <div class="col s12 m8 offset-m2 l6 offset-l3">
+    <!-- ### Start of required HTML for inline interactives ### -->
+    <div class="row interactive" id="interactive-rsa-no-padding" data-iframe-height>
+      <div class="col s12">
+        <h3>RSA <span id="interactive-rsa-no-padding-mode">Entschlüsselung</span></h3>
+        <h5>Schlüssel</h5>
+        <textarea id="interactive-rsa-no-padding-key" rows="5"></textarea>
+
+        <h5><span id="interactive-rsa-no-padding-input-type">Geheimtext</span></h5>
+        <textarea id="interactive-rsa-no-padding-input-text" rows="5"></textarea>
+
+        <button id="interactive-rsa-no-padding-process" class="btn">Entschlüsseln</button>
+
+        <h5><span id="interactive-rsa-no-padding-output-type">Klartext</span></h5>
+        <textarea id="interactive-rsa-no-padding-output-text" rows="5"></textarea>
+      </div>
+      <link rel="stylesheet" href="./css/rsa-no-padding.css">
+      <script type="text/javascript" src="./js/decrypt.js"></script>
+      <script type="text/javascript" src="./js/third-party/jsencrypt-no-padding.js"></script>
+        </div>
+    <!-- ### End of required HTML for inline interactives ### -->
+    </div>
+    </div>
+    <!-- Materialize responsive CSS -->
+    <script type="text/javascript" src="../lib/js/materialize.min.js"></script>
+  </body>
+</html>
