@@ -1,8 +1,20 @@
 var correct = 0;
 var incorrect = 0;
 
+$.urlParam = function(name){
+    var results = new RegExp('[\?&]' + name).exec(window.location.href);
+    if (results==null){
+       return false;
+    }
+    else{
+       return true;
+    }
+}
+
 $(document).ready(function(){
 
+    var comments = $.urlParam('comments');
+    
     $(".card").on("swiperight", function(){
         if ($('.rotate-left:visible').length || $('.rotate-right:visible').length) {
             return;
@@ -12,13 +24,19 @@ $(document).ready(function(){
 
         if ($(this).attr('data-sol') == 'analog'){ //(solution[correct+incorrect] == 'analog'){
             correct ++;
+            $('.speech-bubble').text($(this).attr('data-note-correct'))
             $('#correct').html(correct);
         }
         else {
             incorrect++;
+            $('.speech-bubble').text($(this).attr('data-note-wrong'));
             $('#incorrect').html(incorrect);
         }
-
+        
+        
+        if (comments) {
+            $('.speech-bubble-container').show().delay(3000).fadeOut()
+        }
 
         $(this).append('<div class="status like">Analog!</div>');      
         if ( $(this).is(':last-child') ) {
@@ -39,13 +57,19 @@ $(document).ready(function(){
 
         if ($(this).attr('data-sol') == 'digital'){
             correct ++;
+            $('.speech-bubble').text($(this).attr('data-note-correct'))
             $('#correct').html(correct);
         }
         else {
             incorrect++;
+            $('.speech-bubble').text($(this).attr('data-note-wrong'));
             $('#incorrect').html(incorrect);
         }
 
+        if (comments) {
+            $('.speech-bubble-container').show().delay(3000).fadeOut()
+        }
+            
         if ( $(this).is(':last-child') ) {
             $('#container').html('<div class="message">Ende</div>')
          } else {
