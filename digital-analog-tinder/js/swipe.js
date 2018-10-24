@@ -19,7 +19,7 @@ $(document).ready(function(){
         if ($('.rotate-left:visible').length || $('.rotate-right:visible').length) {
             return;
         }
-        $(this).addClass('rotate-left').delay(1400).fadeOut(2);
+        $(this).addClass('rotate-left').delay(500).fadeOut(2);
         $('.card').find('.status').remove();
 
         if ($(this).attr('data-sol') == 'analog'){ //(solution[correct+incorrect] == 'analog'){
@@ -51,7 +51,7 @@ $(document).ready(function(){
         if ($('.rotate-left:visible').length || $('.rotate-right:visible').length) {
             return;
         }
-        $(this).addClass('rotate-right').delay(1400).fadeOut(2);
+        $(this).addClass('rotate-right').delay(500).fadeOut(2);
         $('.card').find('.status').remove();
         $(this).append('<div class="status dislike">Digital!</div>');
 
