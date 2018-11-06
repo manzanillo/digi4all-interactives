@@ -20,6 +20,20 @@ var timeFormatter = wNumb({
     },
 });
 
+var timeFormatterLong = wNumb({
+    edit: function( a ){
+        if (a < 60) {
+            return Math.round(a) + " min.";  
+        } 
+        else if (a < 1440) {
+            return Number.parseFloat(a / 60).toFixed(0) + " h";
+        }
+        else {
+            return Number.parseFloat(a / (24*60)).toFixed(0) + " Tage";
+        }
+    },
+});
+
 var distanceFormatter = wNumb({
   postfix: ' km',
   decimals:  0,
@@ -32,6 +46,14 @@ var timeRange = {
   '70%': [  1008 ],
   'max': [  1440 ]
 };
+
+var timeRangeLong = {
+  'min': [  1 ],
+  '30%': [  50 ],
+  '70%': [  1440 ],
+  'max': [  10080 ]
+};
+
 
 var dayRange = {
   'min': [  1 ],
@@ -53,7 +75,7 @@ window.onload = function(){
     var lesbosSlider = document.getElementById('lesbos');
 
     noUiSlider.create(lesbosSlider, {
-        start: [1000],
+        start: [1],
         tooltips: dayFormatter,
         connect: false,
         step: 1,
@@ -64,7 +86,7 @@ window.onload = function(){
     var boteSlider = document.getElementById('bote');
     //350.000
     noUiSlider.create(boteSlider, {
-        start: [30],
+        start: [10],
         tooltips: distanceFormatter,
         connect: false,
         step: 1,
@@ -76,7 +98,7 @@ window.onload = function(){
     var kaiserSlider = document.getElementById('kaiser');
     //Der roemische Kaiser Augustinus wartete einst lange auf einen Brief. Wie lange musste er sich gedulden? (9 Jahre)
     noUiSlider.create(kaiserSlider, {
-        start: [30],
+        start: [1],
         tooltips: dayFormatter,
         connect: false,
         step: 1,
@@ -87,7 +109,7 @@ window.onload = function(){
     var sklaveSlider = document.getElementById('sklave');
     // Wie viele Kilometer musste ein römischer Skalve zum Überbringen einer Botschaft pro Tag zurücklegen? (bis zu 75 km)
     noUiSlider.create(sklaveSlider, {
-        start: [30],
+        start: [10],
         tooltips: distanceFormatter,
         connect: false,
         step: 1,
@@ -99,7 +121,7 @@ window.onload = function(){
     var taubeSlider = document.getElementById('taube');
     // Wie lange benötigt eine Brieftaube, um Nachrichten zwischen Aachen und Brüssel (ca. 150km) zu übermitteln? (2 Stunden)
     noUiSlider.create(taubeSlider, {
-        start: [465],
+        start: [1],
         tooltips: timeFormatter,
         connect: false,
         step: 1,
@@ -111,7 +133,7 @@ window.onload = function(){
     var zugSlider = document.getElementById('zug');
     //Wie lange benötigt ein Zug, um Nachrichten zwischen Aachen und Brüssel (ca. 150km) zu übermitteln? (6 Stunden)
     noUiSlider.create(zugSlider, {
-        start: [465],
+        start: [1],
         tooltips: timeFormatter,
         connect: false,
         step: 1,
@@ -123,12 +145,12 @@ window.onload = function(){
     var londonSlider = document.getElementById('london');
 
     noUiSlider.create(londonSlider, {
-        start: [465],
-        tooltips: timeFormatter,
+        start: [1],
+        tooltips: timeFormatterLong,
         connect: false,
         step: 1,
         orientation: 'horizontal', // 'horizontal' or 'vertical'
-        range: timeRange, 
+        range: timeRangeLong, 
     });
 
 }
@@ -246,11 +268,11 @@ var eval = function(){
     noUiSlider.create(londonSlider, {
         start: [Math.min(londonValue, londonValueDesired),
                                     Math.max(londonValue, londonValueDesired)],
-        tooltips: [timeFormatter, timeFormatter],
+        tooltips: [timeFormatterLong, timeFormatterLong],
         connect: true,
         step: 1,
         orientation: 'horizontal', // 'horizontal' or 'vertical'
-        range: timeRange
+        range: timeRangeLong
     });
     
     sliders.forEach(function(slider){
