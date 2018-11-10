@@ -35,7 +35,7 @@ $(document).ready(function(){
         
         
         if (comments) {
-            $('.speech-bubble-container').show().delay(6000).fadeOut()
+            $('.speech-bubble-container').show().delay(12000).fadeOut()
         }
 
         $(this).append('<div class="status like">Analog!</div>');      
@@ -67,7 +67,7 @@ $(document).ready(function(){
         }
 
         if (comments) {
-            $('.speech-bubble-container').show().delay(6000).fadeOut()
+            $('.speech-bubble-container').show().delay(12000).fadeOut()
         }
             
         if ( $(this).is(':last-child') ) {
