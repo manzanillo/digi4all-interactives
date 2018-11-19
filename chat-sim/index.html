@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Chat</title>
+    <meta charset="utf-8">
+    <style>
+      body {
+        font-family: "Avenir Next", "Calibri", "Helvetica Neue", Arial, sans-serif;
+        font-size: 10pt;
+      }
+      img {
+        max-width: 100%;
+        max-height: 100%;
+        }
+      .phonecontainer {
+        position: absolute;
+      }
+      .msgarea {
+        position: absolute;
+        background-color: #CCCCCC;
+        overflow-x: hidden;
+        overflow-y: visible;
+      }
+      .embedded {
+        height: 468px;
+        width: 312px;
+        top:185px;
+        left:42px;
+        }
+      .solo {
+        height: 468px;
+        width: 310px;
+        top:0px;
+        left:0px;
+        }
+      .out {
+        background-color: #AAFFAA;
+        display: block;
+        text-align: right;
+        padding: 5px;
+        margin-left: 25%;
+        margin-right: 10px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        }
+      .in {
+        background-color: white;
+        display: block;
+        text-align: left;
+        padding: 5px;
+        margin-left: 10px;
+        margin-right: 25%;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        border-radius: 5px;
+        }
+      .msgDiv {
+        display: none;
+        position: absolute;
+        border: 4px solid blue;
+        background-color: grey;
+        top: 50px;
+        left: 50px;
+        width: 320px;
+        height: 640px;
+        z-index: 999;
+      }
+      textarea {
+        width: 98%;
+        height: 95%;
+        resize: none;
+        font-size: 12pt;
+      }
+    </style>
+  </head>
+  <body>
+    <div style="display:none;" id="msglist">
+    </div>
+    <div class="msgDiv" id="msgDiv">
+      <textarea id="messages">
+# hier die Chat-Texte erfassen.
+# > markiert ausgehenden Text
+# < markiert empfangenen Text
+# eine Zahl vor dem &lt; oder &gt; 
+# gibt die Wartezeit vor der Ausgabe
+# in Millisekunden an (default 1000ms).
+# Das "#" definiert einen Kommentar,
+# ab da bis Zeilenende wird ignoriert.
+# Bilder einbinden per HTML img-Tag,
+# z.B. <img src="http://ogy.de/zyt6">
+# Chat-Fenster leeren: Seite neu laden.
+#
+# Hier ein kleiner Beispiel-Chat:
+&gt; Hallo... 
+
+3000&lt; hi
+
+2500&gt; Wollen Sie wissen, was Sie in diesem Modul lernen können?
+
+2000&lt; UN-BE-DINGT!
+
+2500&gt; Ok! Es geht um Kommunikation, Interaktion und Kollaboration.
+
+2500&lt;Ah... deswegen diese alberne Chat-Simulation
+
+3000&gt;Äh...
+2000&gt;Genau. 
+2000&gt;Also... Sie lernen Folgendes:
+2000&lt; Ich bin gespannt...
+2500&gt; Sie lernen...
+2500&gt;was Kommunikation ist
+2000&lt; ok
+2500&gt;was mediale Kommunikation ist
+2500&gt;was Kommunikation von Interaktion unterscheidet
+2500&lt; Da gibts einen Unterschied?
+2500&gt;gute Frage. Wir klären das.
+2000&lt; Na zum Glück 
+2500&gt;:)
+3500&gt; Ok, ich mach weiter.
+2000&lt; Prima.
+2500&gt;Sie lernen, wie die Digitalisierung unsere Kommunikation beeinflusst
+2500&gt;welcher Stellenwert Kommunikationskompetenz unter den Bedingungen der Digitalisierung in der Schule zukommt
+4000&lt;Hat mich schon gewundert, wo der Bezug zur Schule bleibt
+3000&gt;Ja, keine Sorge, der ist da. Nur die Grundlagen sind wichtig, um die Bedeutung der Digitalisierung für schulische Kommunikationsprozesse zu verstehen...
+3500&lt;Alles klar. Weitermachen!
+2500&gt;wie der Mensch und digitale Medien miteinander kommunizieren bzw. interagieren
+2500&lt;Ui. Science Fiction.
+2500&gt;wie diese Mensch-Maschine-Interaktion am besten in der Schule eingesetzt wird
+2500&lt;Klingt gut.
+2500&gt;und wie am besten nicht.
+2500&lt;Puh... das klingt nach viel Stoff.
+2500&gt;Klingt nacht mehr als es ist. Wird schön abwechslungsreich.
+2500&lt;Dein Wort in Gottes Ohr.
+2500&gt;Geht ja noch weiter.
+2500&lt;Ach
+2500&gt;klar :)
+2500&gt;Mit Kollaboration.
+2500&lt;mmh..
+2500&gt;Keine Sorge. Schön knackig, aber nicht oberflächlich, und nicht langweilig (hoffen wir zumindest).
+2500&gt;Wir zeigen Ihnen, welchen Stellenwert die mediale Zusammenarbeit für Ihren Beruf hat
+2500&gt;welche Möglichkeiten sie ihnen eröffnet
+2500&gt;und ihren Schülerinnen und Schülern.
+2500&gt;Seien Sie gespannt.
+2500&lt;bin ich ;)
+2500&gt;Na dann viel Spaß :)
+      </textarea>
+      <input style="margin-left: 10px;" type="button" value="Schließen" id="closeBtn" onclick="closeMessageWindow();">
+    </div>
+
+ <!--<div id="settings" class="settingscontainer">
+      <p><input type="checkbox" id="phoneVisible" checked value="Smartphone sichtbar" onchange="togglePhoneImage();">Smartphone sichtbar</p>
+      <p>
+        <input type="button" value="Texte erfassen" name="msgsbtn" onclick="editMessages();">
+        <input type="button" value="Chat starten" name="startbtn" onclick="demo();">
+        <input type="button" value="Chat leeren" name="clearbtn" onclick="clearChat();">
+      </p> 
+    </div>  -->
+
+    <div id="phone" class="phonecontainer">
+      <img src="./ThePhone.png" id="phoneimage">
+      <div class="msgarea embedded" id="msgarea" onclick="demo();">
+        <!-- <p>Hier klicken zum Start ...</p> -->
+      </div>
+    </div>  
+
+    <script type="text/javascript">
+        loadMessages();
+        var parent = document.getElementById("msgarea");
+        var msgs = document.getElementById("msglist").children;
+
+        function loadMessages() {
+          txt = document.getElementById("messages").value.split("\n");
+          result = new Array();
+          for(var i=0; i< txt.length; i++) {
+            s = txt[i].trim();
+            // do we have a comment? remove it from line.
+            if(s.indexOf("#") > -1) {
+              s = s.substr(0, s.indexOf("#"));
+            }
+            // if ther is a line to process...
+            if(s != "") {
+              // first create the div node
+              var d = document.createElement('div');
+              // go check for a number before direction char
+              wo = 0;
+              delay = "";
+              while(wo < s.length && s[wo] >= "0" && s[wo] <= "9") {
+                delay += s[wo];
+                wo++;
+              }
+              // default is 1000ms, if nothing set
+              if(delay == "") delay = "1000";
+              // add to data attributes
+              d.dataset.delay = delay;
+              // clear out the duration
+              s = s.substr(wo, s.length);
+              // get the correct css class for indicated direction
+              switch(s[0]) {
+                case ">":
+                  d.className = "out"; 
+                  break;
+                case "<":
+                  d.className = "in";
+                  break;
+                default:
+                  d.className = "out";
+                  break;
+              }
+              // set the text of the message
+              // still have to remove direction char! (index 0)
+              d.innerHTML = s.substr(1, s.length);
+              // add to result array
+              result.push(d);
+            }  
+          }
+
+          l = document.getElementById("msglist");
+          while (l.firstChild) {
+            l.removeChild(l.firstChild);
+          }
+          for(var i=0; i < result.length; i++) {
+            l.appendChild(result[i]);
+          }
+        }
+
+        function clearChat() {
+          l = document.getElementById("msgarea");
+          while (l.firstChild) {
+            l.removeChild(l.firstChild);
+          }
+        }
+
+        function closeMessageWindow() {
+          msgdiv = document.getElementById("msgDiv");
+          msgdiv.style.display = "none";
+          loadMessages();
+        }
+
+        function editMessages() {
+          msgdiv = document.getElementById("msgDiv");
+          msgdiv.style.display = "block";
+        }
+
+        function togglePhoneImage() {
+          elem = document.getElementById('phoneimage');
+          chk = document.getElementById("phoneVisible").checked;
+          if(!chk) {
+            elem.style.visibility = "hidden";
+            document.getElementById("msgarea").classList.remove("embedded");
+            document.getElementById("msgarea").classList.add("solo");
+          } else {
+            elem.style.visibility = "visible";
+            document.getElementById("msgarea").classList.add("embedded");
+            document.getElementById("msgarea").classList.remove("solo");
+          }
+        }
+   
+        function sleep(ms) {
+          return new Promise(resolve => setTimeout(resolve, ms));
+        }
+   
+        async function demo() {
+          loadMessages();
+          while(msgs[0] != undefined) {
+            console.log(msgs);
+            d = msgs[0].dataset.delay;
+            if(d == undefined) d = 1000; // default 1000ms
+            await sleep(d);
+            parent.appendChild(msgs[0]);
+            // dirty hack, refactor scrolling to bottom...
+            parent.scrollTop += 500;  
+          }
+        }
+        
+        window.onload = function(){
+         demo();   
+        }
+      </script>
+  </body>
+</html>
+ 
