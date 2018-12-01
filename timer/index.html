@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- ### Enter your interactive title in the title block ### -->
+    <title>Timer</title>
+    <link rel="stylesheet" href="../lib/css/materialize.min.css" type="text/css" media="screen,projection"/>
+    <!-- jQuery (necessary for Materialize) -->
+    <script type="text/javascript" src="../lib/js/jquery.min.js"></script>
+  </head>
+  <body>
+    <div class="row">
+    <div class="col s12">
+        <h3>Timer</h3>
+        <h3 id="timer">00:00</h3>
+        <button class="btn waves-effect waves-light" id="start">Starten</button>
+        <button class="btn waves-effect waves-light" id="clear">Zurücksetzen</button>     
+     
+        <script type="text/javascript">
+        
+        var minutes, seconds, timeout;
+        var time = document.getElementById('timer'),
+        start = document.getElementById('start'),
+        clear = document.getElementById('clear');
+            
+        function updateTime(min, sec){
+            time.textContent = (minutes ? (minutes > 9 ? minutes : "0" + minutes) : "00") + ":" + (seconds > 9 ? seconds : "0" + seconds);
+        }
+            
+        function setup(){
+            var url_string = window.location.href;
+            var url = new URL(url_string);
+            minutes = url.searchParams.get("minutes") || 0;
+            seconds = url.searchParams.get("seconds") || 0;
+            updateTime(minutes, seconds);
+        }  
+            
+        setup()
+            
+            
+        function tick() {
+            if (seconds == 0) {
+                seconds = 60;
+                minutes--;
+            }
+            seconds--;
+
+            updateTime(minutes, seconds);
+            if (minutes == 0 && seconds == 0){
+                
+            }
+            else{
+                timer();
+            }
+        }
+            
+        function timer() {
+            timeout = setTimeout(tick, 1000);
+        }
+
+        start.onclick = function(){
+            if (minutes > 0 || seconds > 0 ){
+                timer();   
+            }
+        }
+
+        clear.onclick = function() {
+            window.clearTimeout(timeout);
+            setup();
+        }
+        </script>
+    </div>
+    </div>
+
+    <!-- Materialize responsive CSS -->
+    <script type="text/javascript" src="../lib/js/materialize.min.js"></script>
+    </body>
+  </html>
