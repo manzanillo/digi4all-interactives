@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- ### Enter your interactive title in the title block ### -->
+    <title>Anwendungswissen vs. Konzeptwissen</title>
+  </head>
+  <body>
+    <div class="row">
+    <div class="col s12">
+    <!-- ### Start of required HTML for inline interactives ### -->
+      <button style="   text-decoration: none;
+                        color: #fff;
+                        background-color: #26a69a;
+                        text-align: center;
+                        letter-spacing: .5px;
+                        border: none;
+                        border-radius: 2px;
+                        height: 36px;
+                        line-height: 36px;
+                        padding: 0 16px;
+                        text-transform: uppercase;
+                        display: block; 
+                        margin: 0px auto; ">
+          Los
+      </button>
+      <img src="aufgabe.png" style=" display: none; margin: 0px auto; ">        
+      <script type="text/javascript">
+        var play = document.getElementsByTagName("button")[0];
+        var img = document.getElementsByTagName("img")[0];
+        var hideImage = function () {
+            img.style.display = "none";            
+        };
+        play.onclick = function(){
+            play.style.display = "none";
+            img.style.display = "block";
+            window.setTimeout(hideImage, 20*1000)
+        } 
+      </script>
+    </div>
+    </div>
+    </body>
+  </html>
