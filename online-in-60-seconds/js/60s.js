@@ -95,12 +95,19 @@ window.onload = function(){
 
 
 var eval = function(){
-    document.getElementById('eval-btn').style.visibility='hidden';;
+    document.getElementById('eval-btn').style.visibility='hidden';
     var fbSlider = document.getElementById('facebook');
     var twSlider = document.getElementById('twitter');
     var wikiSlider = document.getElementById('wiki');
     var ytSlider = document.getElementById('youtube');
     var glSlider = document.getElementById('google');
+    
+    var sliders = [fbSlider,
+                  twSlider, 
+                  wikiSlider,
+                  ytSlider,
+                  glSlider,
+                 ];
 
     var facebookValue = fbSlider.noUiSlider.get().replace(".",'').replace(".",'');
     var twitterValue = twSlider.noUiSlider.get().replace(".",'').replace(".",'');
@@ -108,18 +115,15 @@ var eval = function(){
     var ytValue = ytSlider.noUiSlider.get().replace(".",'').replace(".",'');
     var glValue = glSlider.noUiSlider.get().replace(".",'').replace(".",'');
 
-		var facebookValueDesired = 300000;
-		var twitterValueDesired = 350000;
+    var facebookValueDesired = 300000;
+	var twitterValueDesired = 350000;
     var wikiValueDesired = 600;
     var ytValueDesired = 4125000;
     var glValueDesired = 3500000;
 
-
-    fbSlider.noUiSlider.destroy();
-    twSlider.noUiSlider.destroy();
-    wikiSlider.noUiSlider.destroy();
-    ytSlider.noUiSlider.destroy();
-    glSlider.noUiSlider.destroy();
+    sliders.forEach(function(slider){
+        slider.noUiSlider.destroy();
+    })
 
 
     noUiSlider.create(fbSlider, {
@@ -211,30 +215,22 @@ var eval = function(){
                 })
         });
 
-				fbSlider.setAttribute('disabled', true);
-				twSlider.setAttribute('disabled', true);
-				wikiSlider.setAttribute('disabled', true);
-				ytSlider.setAttribute('disabled', true);
-				glSlider.setAttribute('disabled', true);
-
-				var connect = fbSlider.querySelectorAll('.noUi-connect');
-				facebookValue < facebookValueDesired ? connect[0].classList.add('red-connect')
-				  							: connect[0].classList.add('green-connect');
-
-				connect = twSlider.querySelectorAll('.noUi-connect');
-				twitterValue < twitterValueDesired ? connect[0].classList.add('red-connect')
-											 : connect[0].classList.add('green-connect');
-
-				connect = wikiSlider.querySelectorAll('.noUi-connect');
-				wikiValue < wikiValueDesired ? connect[0].classList.add('red-connect')
-										: connect[0].classList.add('green-connect');
-
-				connect = ytSlider.querySelectorAll('.noUi-connect');
-				ytValue < ytValueDesired ? connect[0].classList.add('red-connect')
-									: connect[0].classList.add('green-connect');
-
-				connect = glSlider.querySelectorAll('.noUi-connect');
-				glValue < glValueDesired ? connect[0].classList.add('red-connect')
-												: connect[0].classList.add('green-connect');
+    sliders.forEach(function(slider){
+        slider.setAttribute('disabled', true);
+    })
+    
+    
+    var tooltips = document.getElementsByClassName('noUi-handle')
+    
+    var i = 0;
+    for (var tooltip of tooltips) {
+        if (i % 2 == 1){
+            tooltip.getElementsByClassName('noUi-tooltip')[0].style.top = "120%";
+            tooltip.getElementsByClassName('noUi-tooltip')[0].style.bottom = "auto";
+            tooltip.getElementsByClassName('noUi-tooltip')[0].style.backgroundColor = "#26a69a";
+            tooltip.getElementsByClassName('noUi-tooltip')[0].style.color = "white";
+        }
+        i++;
+    }
 
 }
