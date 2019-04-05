@@ -1,0 +1,3 @@
+[submodule "traffic-simulation-de"]
+	path = traffic-simulation-de
+	url = https://github.com/manzanillo/traffic-simulation-de.git
