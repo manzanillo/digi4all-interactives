@@ -27,6 +27,7 @@ $(document).ready(function () {
     $('#interactive-binary-cards button#flip-to-white').on('click', function(){
         $('#interactive-binary-cards-container > div.binary-card-container > div.binary-card').removeClass('flipped');
         updateDotCount();
+        updateBinary();
     });
     
     
