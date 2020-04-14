@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- ### Enter your interactive title in the title block ### -->
+    <title>Timer</title>
+    <link rel="stylesheet" href="../lib/css/materialize.min.css" type="text/css" media="screen,projection"/>
+    <!-- jQuery (necessary for Materialize) -->
+    <script type="text/javascript" src="../lib/js/jquery.min.js"></script>
+  </head>
+  <body>
+      
+    
+    <div class="row">
+    <div class="col s12">
+        <h3>Zeichenzähler</h3>
+        <p>Text hier einfügen!</p>
+        <textarea 
+          onKeyDown="textCounter(this,'q17length',500);"
+          onKeyUp="textCounter(this,'q17length',500)" 
+          class="scanwid" name="q17" id="q17" rows="5" cols=""></textarea>
+        </div>
+              <div style="text-align: center; font-size:12pt;font-style:italic;"><span color="primary" readonly="readonly" type="text" id='q17length' name="q17length" >0</span> Zeichen</i>
+      </div>
+        <script type="text/javascript">
+        
+       function textCounter(field, cnt, maxlimit) {         
+          var cntfield = document.getElementById(cnt)   
+            
+          cntfield.innerHTML = field.value.length
+        }
+        </script>
+    </div>
+
+    <!-- Materialize responsive CSS -->
+    <script type="text/javascript" src="../lib/js/materialize.min.js"></script>
+    </body>
+  </html>
