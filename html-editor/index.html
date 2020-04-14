@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8">
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- ### Enter your interactive title in the title block ### -->
+    <title>HTML Editor</title>
+    <!-- jQuery (necessary for Materialize) -->
+    <script type="text/javascript" src="../lib/js/jquery.min.js"></script>
+    <style>
+        html, body {
+          height: 100%;
+        }
+        .row .col.s6 {
+            width: 50%;
+            margin-left: auto;
+            left: auto;
+            right: auto;
+        }
+        .row {
+            height: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            margin-bottom: 20px;
+        }
+        .row:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .col.s6 {
+            height: 90%;
+        }
+
+        .row .col {
+            float: left;
+            -webkit-box-sizing: border-box;
+            box-sizing: border-box;
+            padding: 0 .75rem;
+            min-height: 1px;
+        }
+        textarea {
+            width: 100%;
+            background-color: transparent;
+        }
+    </style>
+  </head>
+  <body>
+      
+    
+    <div class="row">
+        <div class="col s6">
+            <p>Fügen Sie hier Ihren HTML Code ein.</p>
+            <textarea 
+          onKeyUp="render(this)" 
+          style="height: 100%"
+          id="text" rows="5" cols="">
+            </textarea>
+        </div>
+        
+        <div class="col s6">   
+            <p>Ihr Ergebnis</p>
+            <div style="border:1px solid; height: 100%" id="result">
+                Zeichen
+            </div> 
+        </div>
+
+    </div>
+    
+    <script type="text/javascript">        
+    function render(field) {         
+      var cntfield = document.getElementById("result")   
+      cntfield.innerHTML = field.value
+    }
+        
+    window.onload = function(){
+      var text = `
+<html>
+   <head></head>
+   <body>
+      <h1>Ich bin eine Überschrift</h1>
+     
+      <p>Und ich ein Paragraph</p>
+
+      <ul>
+        <li>Eine Liste möglicher HTML Elemente findet sich <a 
+href="https://developer.mozilla.org/de/docs/Web/HTML/HTML5/HTML5_element_list" target="_blank">hier</a>
+         </li>
+      </ul>
+   </body>
+
+
+<html>`
+        var textarea = document.getElementById("text")
+        textarea.value = text
+
+        render(textarea)
+    }
+    </script>
+
+    <!-- Materialize responsive CSS -->
+    <script type="text/javascript" src="../lib/js/materialize.min.js"></script>
+    </body>
+  </html>
