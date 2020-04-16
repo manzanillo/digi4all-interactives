@@ -1,0 +1,20 @@
+canvas {
+  margin: auto;
+}
+
+table, th, td {
+  margin: auto;
+  font-family: monospace;
+  text-align: center;
+  padding: 1rem;
+  padding-left: 3rem;
+  padding-right: 3rem;
+  border: 1px solid #000;
+  border-collapse: collapse;
+}
+
+#data-vis-results, #data-vis-game {
+  position: relative;
+  margin: auto;
+  max-width: 800px;
+}

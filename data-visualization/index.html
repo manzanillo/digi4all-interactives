@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <!--Let browser know website is optimized for mobile-->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <!-- ### Enter your interactive title in the title block ### -->
+        <title>Datenvisualisierung</title>
+        <!--Import materialize.css-->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+        <link
+            rel="stylesheet"
+            href="css/style.css"
+            type="text/css"
+            media="screen,projection"
+        />
+        <!-- jQuery (necessary for Materialize) -->
+        <script type="text/javascript" src="../lib/js/jquery.min.js"></script>
+    </head>
+    <body>
+        <div class="container-fluid my-3 text-center">
+            <div id="data-vis-instructions" class="col-12">
+                <div class="col-12">
+                    Finden Sie die häufigste Zahl der Daten unten. Ihre Zeit ist begrenzt!
+                </div>
+                <button
+                    id="button-start"
+                    type="button"
+                    class="btn btn-success my-1"
+                >
+                    Start
+                </button>
+            </div>
+            <div id="data-vis-guesser" class="col-12 d-none">
+                <label for="data-vis-selector"
+                    >Welche war die häufigste Zahl?</label
+                >
+                <form class="form-inline justify-content-center">
+                    <select
+                        id="data-vis-selector"
+                        class="form-control text-center d-inline mx-2 my-1"
+                        size="1"
+                    >
+                        <option>0</option>
+                        <option>1</option>
+                        <option>2</option>
+                        <option>3</option>
+                        <option>4</option>
+                        <option>5</option>
+                        <option>6</option>
+                        <option>7</option>
+                        <option>8</option>
+                        <option>9</option>
+                    </select>
+                    <button
+                        id="button-submit"
+                        type="button"
+                        class="btn btn-secondary d-inline mx-2 my-1"
+                    >
+                        Auswählen
+                    </button>
+                </form>
+            </div>
+            <div id="data-vis-next" class="col-12 my-1 d-none">
+                <button
+                    id="button-next"
+                    type="button"
+                    class="btn btn-secondary d-inline mx-2"
+                >
+                   Weiter
+                </button>
+                <button
+                    id="button-quit"
+                    type="button"
+                    class="btn btn-danger d-inline mx-2"
+                >
+                    Beenden
+                </button>
+            </div>
+            <div id="data-vis-restart" class="col-12 my-1 d-none">
+                <button
+                    id="button-restart"
+                    type="button"
+                    class="btn btn-primary d-inline mx-2"
+                >
+                    Neustarten
+                </button>
+            </div>
+            <div id="data-vis-game" class="col-12 d-none">
+                <table id="data-vis-grid" class="my-3"></table>
+                <canvas
+                    id="data-vis-barchart"
+                    height="400"
+                    width="800"
+                    role="img"
+                    aria-label="Bar chart showing how many times each value appears in the data."
+                ></canvas>
+                <canvas
+                    id="data-vis-piechart"
+                    height="400"
+                    width="600"
+                    role="img"
+                    aria-label="Pie chart showing the relative proportions of each value in the data."
+                ></canvas>
+            </div>
+            <div id="data-vis-results" class="col-12 d-none">
+                <table id="data-vis-performance" class="my-3">
+                    <tr>
+                        <th>Diagrammtyp</th>
+                        <th>Häufigster Wert</th>
+                        <th>Ihre Antwort</th>
+                    </tr>
+                </table>
+
+                <canvas
+                    id="data-vis-results-chart"
+                    height="400"
+                    width="800"
+                    role="img"
+                    aria-label="Bar chart to compare your performace with different data visualisations."
+                ></canvas>
+            </div>
+        </div>
+        <!-- Materialize responsive CSS -->
+        <script
+            type="text/javascript"
+            src="../lib/js/materialize.min.js"
+        ></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0"></script>
+        <script src="js/data-vis.js"></script>
+    </body>
+</html>
