@@ -1,0 +1,14 @@
+{
+  "name": "csfg-interactive-data-bias",
+  "version": "1.0.0",
+  "private": true,
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "nouislider": "13.1.5",
+    "sass": "^1.26.3",
+    "wnumb": "1.2.0"
+  },
+  "scripts": {
+    "compile-css": "sass css/data-bias.scss css/data-bias.css"
+  }
+}

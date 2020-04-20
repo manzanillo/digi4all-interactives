@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <!--Let browser know website is optimized for mobile-->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- ### Enter your interactive title in the title block ### -->
+    <title>Data Bias</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+      integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+      crossorigin="anonymous"
+    />
+
+    <link
+      rel="stylesheet"
+      href="css/data-bias.css"
+      type="text/css"
+      media="screen,projection"
+    />
+
+    <!-- jQuery (necessary for Materialize) -->
+    <script type="text/javascript" src="../lib/js/jquery.min.js"></script>
+  </head>
+  <body>
+    <div id="data-bias-container" class="flex-grow-1 d-flex flex-column">
+      <h1 class="text-center">Data Bias</h1>
+      <div class="row justify-content-center">
+        <div
+          id="instruction-area"
+          class="col-sm-12 col-md-8 col-lg-8 col-xl-5 text-center mb-3"
+        >
+          <h5 id="instruction-text">
+            Klicken Sie auf jeden Punkt, den Sie auf dem Bildschirm sehen, und
+            klicken Sie dann auf 'Weiter', um die Lösung anzuzeigen!
+          </h5>
+          <div
+            id="background-colour-slider-container"
+            class="container mt-3 d-none"
+          >
+            <div class="pb-2">
+              <div id="background-colour-slider" class="my-3"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mb-3">
+        <button id="next-stage" class="btn btn-primary">
+          Weiter
+        </button>
+        <button id="start-again" class="btn btn-primary d-none">
+          Neu starten
+        </button>
+      </div>
+      <div id="circles-area" class="flex-grow-1 mb-3 align-self-center"></div>
+    </div>
+
+    <!-- Materialize responsive CSS -->
+    <script src="js/no-ui-slider/nouislider.min.js"></script>
+    <script src="js/wnumb/wNumb.min.js"></script>
+    <script src="js/data-bias.js"></script>
+  </body>
+</html>
