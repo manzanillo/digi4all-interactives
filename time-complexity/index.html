@@ -1,0 +1,1586 @@
+<!DOCTYPE html>
+<!-- This is based on DillingerLee's great template here:
+https://github.com/Team-Code/KA_Offline -->
+<html>
+  <head>
+    <title>Zeitaufwand</title>
+  </head>
+  <body>
+    <p align="center">
+      <!--This draws the Canvas on the webpage -->
+      <canvas id="mycanvas"></canvas>
+    </p>
+  </body>
+
+  <!-- Run all the JavaScript stuff -->
+  <!-- Include the processing.js library -->
+  <!-- See https://khanacademy.zendesk.com/hc/en-us/articles/202260404-What-parts-of-ProcessingJS-does-Khan-Academy-support- for differences -->
+  <script src="https://cdn.jsdelivr.net/processing.js/1.4.8/processing.min.js"></script>
+
+  <script>
+    var sketchProc = function (processingInstance) {
+      with (processingInstance) {
+        /**
+
+      Watch how the growth of input size affects the
+      computation time needed for:
+      factorization vs. multiplication.
+
+      You can change the animation speed, reset and pause
+      using the control buttons.
+
+      You can also hover your mouse over any node for details!
+
+      This is an *approximation* on a single (slow) CPU
+      (the shape is more important than the specific times)
+
+    */
+
+        var COLORS = {
+          //  Applied Math
+          AM0: color(48, 167, 222, 255),
+          AM1: color(99, 180, 227, 255),
+          AM2: color(139, 194, 233, 255),
+          AM3: color(41, 115, 149, 255),
+          AM4: color(37, 104, 135, 255),
+          AM5: color(29, 81, 105, 252),
+
+          AM0_LT: color(48, 167, 222, 4),
+
+          _WHITE: color(255, 255, 255, 255),
+          WHITE_LT: color(255, 255, 255, 128),
+          _BLACK: color(0, 0, 0, 255),
+          BLACK_LT: color(0, 0, 0, 128),
+
+          RED: color(255, 128, 20, 255),
+          RED_LT: color(255, 128, 20, 128),
+          BLUE: color(52, 235, 255, 255),
+          BLUE_LT: color(52, 235, 255, 128),
+          YELLOW: color(238, 214, 15, 255),
+          YELLOW_LT: color(238, 214, 15, 128),
+
+          ORANGE: color(238, 136, 15, 255),
+          ORANGE_LT: color(238, 136, 15, 128),
+          GREEN: color(158, 182, 58, 255),
+          GREEN_LT: color(158, 182, 58, 128),
+          GRAY: color(128, 128, 128, 255),
+          GRAY_LT: color(128, 128, 128, 128),
+
+          BROWN: color(155, 145, 135, 255),
+          BROWN_LT: color(155, 145, 135, 128),
+
+          GRAY_16: color(16, 16, 16, 255),
+          GRAY_16LT: color(16, 16, 16, 128),
+          GRAY_32: color(32, 32, 32, 255),
+          GRAY_32LT: color(32, 32, 32, 128),
+          GRAY_64: color(64, 64, 64, 255),
+          GRAY_64LT: color(64, 64, 64, 128),
+          GRAY_96: color(96, 96, 96, 255),
+          GRAY_96LT: color(96, 96, 96, 128),
+          GRAY_128: color(128, 128, 128, 255),
+          GRAY_128LT: color(128, 128, 128, 128),
+          GRAY_160: color(160, 160, 160, 255),
+          GRAY_160LT: color(160, 160, 160, 128),
+          GRAY_192: color(192, 192, 192, 255),
+          GRAY_192LT: color(192, 192, 192, 128),
+          GRAY_224: color(224, 224, 224, 255),
+          GRAY_224LT: color(224, 224, 224, 128),
+          GRAY_240: color(240, 240, 240, 255),
+          GRAY_240LT: color(240, 240, 240, 128),
+          GRAY_255: color(255, 255, 255, 255),
+          GRAY_255LT: color(255, 255, 255, 128),
+        };
+
+        var env = {
+          pressed: false,
+          legend: false,
+          instructions: true,
+          animate: true,
+          animateRate: 15,
+          legendX: -320,
+
+          title: "Title",
+          toolTip: "Welcome",
+
+          currentNode: -1,
+          nodeSize: 20,
+          focus: -1,
+
+          maxX: 1,
+          maxY: 1,
+          fnodes: [],
+          mnodes: [],
+          background: COLORS._BLACK, //_WHITE, //Hier Hintergrundfarbe ändern
+        };
+
+        //  Control Types
+        var CONTROLS = {
+          TOGGLE: 0,
+          INDEX: 1,
+          BUTTON: 2,
+          CHECK: 4,
+          LABEL: 5,
+          GRAPH: 6,
+          MNODE: 7,
+          FNODE: 8,
+          PLAY: 9,
+          CLEAR: 10,
+          INCREASE: 11,
+          DECREASE: 12,
+        };
+
+        var tooltips = [
+          "Play/Pause",
+          "Zurücksetzen",
+          "Animationsgeschwindigkeit erhöhen",
+          "Animationsgeschwindigkeit verringern",
+          "Click to enter multiplier",
+          "Display/Hide Legend",
+          "Graph",
+          "Display Index",
+          "Start",
+          " = 13407807929942597099574024998205846127479365820592393377723561443721764030073546976801874298166903427690031858186486050853753882811946569946433649006084096",
+        ];
+
+        //  Generic control properties
+        var prop = function (i, x, y, w, h, t, v, f, c) {
+          this.i = i; //  index
+          this.x = x; //  left
+          this.y = y; //  top
+          this.w = w; //  width
+          this.h = h; //  height
+          this.t = t; //  control type
+          this.f = f; //  execute function
+          this.v = v; //  value
+          this.c = c; //  caption
+        };
+
+        var nprop = function (i, x, y, t, f, g, gx, gy) {
+          this.i = i; //  index
+          this.x = x; //  left
+          this.y = y; //  top
+          this.t = t; //  type
+          this.f = f; //  function
+          this.g = g; //  tag
+          this.gx = gx; //  graph x
+          this.gy = gy; //  graph y
+        };
+
+        var sF = ""; //  # to factor
+        var sM1 = ""; //  1st # to multiply
+        var sM2 = ""; //  2nd # to multiply
+
+        var index = function (prop) {
+          size(400, 400);
+          var _pressed = false;
+
+          var _locked = false;
+
+          var _hit = function (x, y) {
+            if (
+              x >= prop.x &&
+              x <= prop.x + prop.w &&
+              y >= prop.y &&
+              y <= prop.y + prop.h
+            ) {
+              return true;
+            }
+          };
+          this.pressed = function (x, y) {
+            _pressed = true;
+          };
+          this.released = function (x, y) {
+            _pressed = false;
+          };
+
+          var _draw = function (x, y) {
+            if (_hit(x, y)) {
+              stroke(COLORS.GRAY_160);
+            } else {
+              stroke(COLORS.GRAY_128);
+            }
+
+            strokeWeight(3);
+
+            line(prop.x, prop.y, prop.x + prop.w, prop.y);
+            line(prop.x, prop.y + 5, prop.x + prop.w, prop.y + 5);
+            line(prop.x, prop.y + 10, prop.x + prop.w, prop.y + 10);
+          };
+          this.clicked = function (x, y) {
+            if (_hit(x, y)) {
+              env.legend = !env.legend;
+            }
+          };
+          this.refresh = function (x, y) {
+            _draw(x, y);
+          };
+          this.mouseMoved = function (x, y) {
+            if (_hit(x, y)) {
+              env.tooltip = tooltips[prop.i];
+            }
+          };
+        };
+
+        var label = function (prop) {
+          //  label definition
+
+          var _hit = function (x, y) {
+            if (
+              x >= prop.x &&
+              x <= prop.x + prop.w &&
+              y >= prop.y &&
+              y <= prop.y + prop.h
+            ) {
+              return true;
+            }
+          };
+          var _focus = function () {
+            return env.focus === prop.i;
+          };
+          var _draw = function (x, y) {
+            strokeWeight(1);
+            stroke(COLORS.GRAY);
+            textAlign(RIGHT, CENTER);
+            fill(COLORS.GRAY_224);
+
+            if (_focus()) {
+              fill(COLORS._WHITE);
+              stroke(COLORS.AM3);
+              strokeWeight(1.5);
+            }
+            if (_hit(x, y)) {
+              fill(COLORS._WHITE);
+            }
+
+            rect(prop.x, prop.y, prop.w, prop.h, 2);
+
+            fill(COLORS._BLACK);
+            textSize(12);
+            textAlign(RIGHT, CENTER);
+
+            var s = "";
+
+            if (prop.i === 5) {
+              s = sF;
+            } else if (prop.i === 3) {
+              s = sM1;
+            } else if (prop.i === 4) {
+              s = sM2;
+            }
+
+            text(s, prop.x - 3 + prop.w, prop.y + prop.h / 2 + 1);
+          };
+          this.clicked = function (x, y) {
+            if (_hit(x, y)) {
+              env.focus = prop.i;
+            }
+          };
+          this.refresh = function (x, y) {
+            _draw(x, y);
+          };
+          this.mouseMoved = function (x, y) {
+            if (_hit(x, y)) {
+              env.tooltip = tooltips[prop.i];
+            }
+          };
+        };
+
+        var button = function (prop) {
+          //  button definition
+
+          //  private methods --------------------------------------------------
+          var _hit = function (x, y) {
+            if (
+              x >= prop.x &&
+              x <= prop.x + prop.w &&
+              y >= prop.y &&
+              y <= prop.y + prop.h
+            ) {
+              return true;
+            }
+          };
+
+          var _draw = function (x, y) {
+            strokeWeight(1);
+
+            var disp = 21;
+            var clr = COLORS.RED;
+            var hit = _hit(x, y);
+
+            if (hit) {
+              fill(COLORS._WHITE);
+              if (env.pressed) {
+                disp = 1;
+              } else {
+                disp = 0;
+              }
+            } else {
+              fill(COLORS.GRAY_192);
+              disp = 0;
+            }
+
+            //  Shadow
+            noStroke();
+            fill(COLORS.GRAY_32);
+            rect(prop.x + 2, prop.y + 2, prop.w, prop.h, 2);
+
+            //  Gradient
+            var incr = 1;
+
+            for (var n = 0; n < prop.h; n += incr) {
+              if (hit) {
+                stroke(
+                  lerpColor(
+                    color(192, 192, 192),
+                    color(224, 224, 224),
+                    n / prop.h
+                  )
+                );
+              } else {
+                stroke(
+                  lerpColor(
+                    color(224, 224, 224),
+                    color(192, 192, 192),
+                    n / prop.h
+                  )
+                );
+              }
+              rect(
+                prop.x + disp + 1,
+                prop.y + n + disp + 1,
+                prop.w - 2,
+                incr - 2,
+                1
+              );
+            }
+
+            //  Button
+            noFill();
+            rect(prop.x + disp, prop.y + disp, prop.w, prop.h, 2);
+
+            //  Caption
+            fill(COLORS._BLACK);
+            textAlign(CENTER, CENTER);
+            textSize(10);
+            text(
+              prop.c,
+              prop.x + prop.w / 2 + disp,
+              prop.y + prop.h / 2 + disp
+            );
+          };
+
+          //  public methods --------------------------------------------------
+          this.pressed = function (x, y) {
+            if (_hit(x, y)) {
+            }
+          };
+          this.released = function (x, y) {
+            if (_hit(x, y)) {
+            }
+          };
+          this.clicked = function (x, y) {
+            if (_hit(x, y)) {
+              //env.focus=prop.i;
+              prop.f(prop.c);
+            }
+          };
+          this.refresh = function (x, y) {
+            _draw(x, y);
+          };
+          this.mouseMoved = function (x, y) {
+            if (_hit(x, y)) {
+              env.tooltip = tooltips[prop.i];
+            }
+          };
+        };
+
+        var play = function (prop) {
+          //  play/pause button definition
+
+          //  private methods --------------------------------------------------
+          var _hit = function (x, y) {
+            if (
+              x >= prop.x - 10 &&
+              x <= prop.x + 10 &&
+              y >= prop.y - 10 &&
+              y <= prop.y + 10
+            ) {
+              return true;
+            }
+          };
+
+          var _draw = function (x, y) {
+            strokeWeight(1);
+
+            var disp = 21;
+            var clr = COLORS.RED;
+            var hit = _hit(x, y);
+
+            if (hit) {
+              fill(COLORS.GRAY_160);
+              stroke(COLORS.GRAY_160);
+              if (env.pressed) {
+                disp = 1;
+              } else {
+                disp = 0;
+              }
+            } else {
+              fill(COLORS.GRAY_128);
+              stroke(COLORS.GRAY_128);
+              disp = 0;
+            }
+
+            fill(COLORS._BLACK);
+            strokeWeight(1);
+
+            rect(
+              prop.x + disp - prop.w / 2,
+              prop.y + disp - prop.h / 2,
+              prop.w,
+              prop.h,
+              2
+            );
+
+            if (env.animate) {
+              strokeWeight(3);
+              line(
+                prop.x + 2 + disp,
+                prop.y - 3 + disp,
+                prop.x + 2 + disp,
+                prop.y + 3 + disp
+              );
+              line(
+                prop.x - 2 + disp,
+                prop.y - 3 + disp,
+                prop.x - 2 + disp,
+                prop.y + 3 + disp
+              );
+            } else {
+              strokeWeight(1);
+              fill(COLORS.GRAY_160);
+              beginShape();
+              vertex(prop.x + 4 + disp, prop.y + disp);
+              vertex(prop.x - 4 + disp, prop.y + 4 + disp);
+              vertex(prop.x - 4 + disp, prop.y - 4 + disp);
+              endShape(CLOSE);
+            }
+          };
+
+          //  public methods --------------------------------------------------
+          this.pressed = function (x, y) {
+            if (_hit(x, y)) {
+            }
+          };
+          this.released = function (x, y) {
+            if (_hit(x, y)) {
+            }
+          };
+          this.clicked = function (x, y) {
+            if (_hit(x, y)) {
+              //env.focus=prop.i;
+              prop.f(prop.c);
+            }
+          };
+          this.refresh = function (x, y) {
+            _draw(x, y);
+          };
+          this.mouseMoved = function (x, y) {
+            if (_hit(x, y)) {
+              env.tooltip = tooltips[prop.i];
+            }
+          };
+        };
+        var clear = function (prop) {
+          //  play/pause button definition
+
+          //  private methods --------------------------------------------------
+          var _hit = function (x, y) {
+            if (
+              x >= prop.x - 10 &&
+              x <= prop.x + 10 &&
+              y >= prop.y - 10 &&
+              y <= prop.y + 10
+            ) {
+              return true;
+            }
+          };
+
+          var _draw = function (x, y) {
+            strokeWeight(1);
+
+            var disp = 21;
+            var clr = COLORS.RED;
+            var hit = _hit(x, y);
+
+            if (hit) {
+              fill(COLORS.GRAY_160);
+              stroke(COLORS.GRAY_160);
+              if (env.pressed) {
+                disp = 1;
+              } else {
+                disp = 0;
+              }
+            } else {
+              fill(COLORS.GRAY_128);
+              stroke(COLORS.GRAY_128);
+              disp = 0;
+            }
+
+            fill(COLORS._BLACK);
+            strokeWeight(1);
+
+            rect(
+              prop.x + disp - prop.w / 2,
+              prop.y + disp - prop.h / 2,
+              prop.w,
+              prop.h,
+              2
+            );
+
+            fill(COLORS.GRAY_160);
+            textAlign(CENTER, CENTER);
+            textSize(20);
+            text("↻", prop.x + disp, prop.y + disp);
+          };
+
+          //  public methods --------------------------------------------------
+          this.pressed = function (x, y) {
+            if (_hit(x, y)) {
+            }
+          };
+          this.released = function (x, y) {
+            if (_hit(x, y)) {
+            }
+          };
+          this.clicked = function (x, y) {
+            if (_hit(x, y)) {
+              //env.focus=prop.i;
+              prop.f(prop.c);
+            }
+          };
+          this.refresh = function (x, y) {
+            _draw(x, y);
+          };
+          this.mouseMoved = function (x, y) {
+            if (_hit(x, y)) {
+              env.tooltip = tooltips[prop.i];
+            }
+          };
+        };
+        var increase = function (prop) {
+          //  play/pause button definition
+
+          //  private methods --------------------------------------------------
+          var _hit = function (x, y) {
+            if (
+              x >= prop.x - 10 &&
+              x <= prop.x + 10 &&
+              y >= prop.y - 10 &&
+              y <= prop.y + 10
+            ) {
+              return true;
+            }
+          };
+
+          var _draw = function (x, y) {
+            strokeWeight(1);
+
+            var disp = 21;
+            var clr = COLORS.RED;
+            var hit = _hit(x, y);
+
+            if (hit) {
+              fill(COLORS.GRAY_160);
+              stroke(COLORS.GRAY_160);
+              if (env.pressed) {
+                disp = 1;
+              } else {
+                disp = 0;
+              }
+            } else {
+              fill(COLORS.GRAY_128);
+              stroke(COLORS.GRAY_128);
+              disp = 0;
+            }
+
+            fill(COLORS._BLACK);
+            strokeWeight(1);
+
+            rect(
+              prop.x + disp - prop.w / 2,
+              prop.y + disp - prop.h / 2,
+              prop.w,
+              prop.h,
+              2
+            );
+
+            fill(COLORS.GRAY_160);
+            textAlign(CENTER, CENTER);
+            textSize(16);
+            text("+", prop.x + disp, prop.y + disp);
+          };
+
+          //  public methods --------------------------------------------------
+          this.pressed = function (x, y) {
+            if (_hit(x, y)) {
+            }
+          };
+          this.released = function (x, y) {
+            if (_hit(x, y)) {
+            }
+          };
+          this.clicked = function (x, y) {
+            if (_hit(x, y)) {
+              //env.focus=prop.i;
+              prop.f(prop.c);
+            }
+          };
+          this.refresh = function (x, y) {
+            _draw(x, y);
+          };
+          this.mouseMoved = function (x, y) {
+            if (_hit(x, y)) {
+              env.tooltip = tooltips[prop.i];
+            }
+          };
+        };
+        var decrease = function (prop) {
+          //  play/pause button definition
+
+          //  private methods --------------------------------------------------
+          var _hit = function (x, y) {
+            if (
+              x >= prop.x - 10 &&
+              x <= prop.x + 10 &&
+              y >= prop.y - 10 &&
+              y <= prop.y + 10
+            ) {
+              return true;
+            }
+          };
+
+          var _draw = function (x, y) {
+            strokeWeight(1);
+
+            var disp = 21;
+            var clr = COLORS.RED;
+            var hit = _hit(x, y);
+
+            if (hit) {
+              fill(COLORS.GRAY_160);
+              stroke(COLORS.GRAY_160);
+              if (env.pressed) {
+                disp = 1;
+              } else {
+                disp = 0;
+              }
+            } else {
+              fill(COLORS.GRAY_128);
+              stroke(COLORS.GRAY_128);
+              disp = 0;
+            }
+
+            fill(COLORS._BLACK);
+            strokeWeight(1);
+
+            rect(
+              prop.x + disp - prop.w / 2,
+              prop.y + disp - prop.h / 2,
+              prop.w,
+              prop.h,
+              2
+            );
+
+            fill(COLORS.GRAY_160);
+            textAlign(CENTER, CENTER);
+            textSize(16);
+            text("-", prop.x + disp, prop.y + disp);
+          };
+
+          //  public methods --------------------------------------------------
+          this.pressed = function (x, y) {
+            if (_hit(x, y)) {
+            }
+          };
+          this.released = function (x, y) {
+            if (_hit(x, y)) {
+            }
+          };
+          this.clicked = function (x, y) {
+            if (_hit(x, y)) {
+              //env.focus=prop.i;
+              prop.f(prop.c);
+            }
+          };
+          this.refresh = function (x, y) {
+            _draw(x, y);
+          };
+          this.mouseMoved = function (x, y) {
+            if (_hit(x, y)) {
+              env.tooltip = tooltips[prop.i];
+            }
+          };
+        };
+        var node = function (prop) {
+          //  node definition
+          var disp = 0;
+
+          var _hit = function (x, y) {
+            if (
+              dist(
+                x,
+                y,
+                ((360 * prop.x) / env.maxX) * 0.95 + 20,
+                360 - ((300 * prop.y) / env.maxY) * 0.95
+              ) <= 5
+            ) {
+              return true;
+            }
+          };
+          var _tooltip = function (x, y) {
+            if (_hit(x, y)) {
+              var _x = ((360 * prop.x) / env.maxX) * 0.95;
+              var _y = ((300 * prop.y) / env.maxY) * 0.95;
+
+              if (env.pressed) {
+                disp = 1;
+              } else {
+                disp = 0;
+              }
+
+              strokeWeight(2);
+              fill(COLORS._BLACK);
+              if (prop.t === CONTROLS.MNODE) {
+                stroke(COLORS.RED);
+              } else {
+                stroke(COLORS.BLUE);
+              }
+
+              var pX = _x - 55;
+
+              rect(pX, _y - 15, 45, 20, 5);
+
+              strokeWeight(1);
+              fill(COLORS._WHITE);
+              textSize(10);
+              textAlign(LEFT, CENTER);
+
+              pushMatrix();
+              scale(1, -1);
+              text(prop.x + " bits", pX + 5, -_y + 4);
+              popMatrix();
+
+              env.tooltip = prop.g;
+            }
+          };
+
+          var _draw = function (x, y) {
+            var _x = ((360 * prop.x) / env.maxX) * 0.95;
+            var _y = ((300 * prop.y) / env.maxY) * 0.95;
+
+            var sf = 1;
+
+            if (_hit(x, y)) {
+              sf *= 2;
+            }
+
+            strokeWeight(1);
+
+            if (prop.t === CONTROLS.MNODE) {
+              fill(COLORS.RED);
+              stroke(COLORS.RED);
+              ellipse(_x, _y, 5 * sf, 5 * sf);
+            } else {
+              fill(COLORS.BLUE);
+              stroke(COLORS.BLUE);
+              beginShape();
+              vertex(_x - 3 * sf, _y); //  left
+              vertex(_x, _y - 3 * sf); //  top
+              vertex(_x + 3 * sf, _y); //  right
+              vertex(_x, _y + 3 * sf); //  bottom
+              endShape(CLOSE);
+            }
+
+            _tooltip(x, y);
+          };
+          this.clicked = function (x, y) {};
+          this.mouseMoved = function (x, y) {
+            if (_hit(x, y)) {
+              env.focus = prop.i;
+              prop.f(prop.i);
+              env.tooltip = prop.x + " bits,  " + prop.g;
+            }
+          };
+          this.refresh = function (x, y) {
+            _draw(x, y);
+          };
+          this.x = function () {
+            return prop.x;
+          };
+          this.y = function () {
+            return prop.y;
+          };
+          this.g = function () {
+            return prop.g;
+          };
+        };
+
+        var update = function () {
+          println("update");
+        };
+        var nodeClick = function (n) {
+          println(n);
+        };
+
+        var _n = 0;
+
+        var reset = function (c) {
+          env.mnodes = [];
+          env.fnodes = [];
+
+          env.maxX = 0;
+          env.maxY = 0;
+
+          sM1 = "";
+          sM2 = "";
+          sF = "";
+
+          env.toolTip = "reset";
+          _n = 0;
+
+          //println(c);
+        };
+
+        var animate = function () {
+          env.animate = !env.animate;
+        };
+
+        var increment = function () {
+          if (env.animateRate === 1) {
+            return;
+          }
+
+          env.animateRate -= 1;
+          // println(env.animateRate);
+        };
+
+        var decrement = function () {
+          env.animateRate += 1;
+          //println(env.animateRate);
+        };
+
+        var graph = function (prop) {
+          if (env.instructions) {
+            prop.h -= 10;
+          }
+
+          var _ticks = function () {
+            var n = 0;
+            var start = 20;
+
+            //if(env.maxX%10===0){ start=10; }
+            strokeWeight(1);
+            stroke(COLORS.GRAY_16);
+            //  Gradient
+            for (n = start; n <= prop.h; n += 20) {
+              //stroke(n/3,n/3,n/3,n/3);
+              line(0, n, prop.w, n);
+            }
+
+            for (n = start; n <= prop.w; n += 20) {
+              //stroke(n/3,n/3,n/3,n/3);
+              line(n, 0, n, prop.h);
+            }
+
+            //  x-axis
+            //stroke(COLORS.GRAY_16);
+            strokeWeight(1);
+
+            for (n = start; n <= prop.w; n += 20) {
+              line(n, -3, n, 0);
+              fill(n, n, n);
+            }
+
+            //  y-axis
+            for (n = start; n <= prop.h; n += 20) {
+              line(-3, n, 0, n);
+              fill(n, n, n);
+            }
+          };
+          var _axisLabels = function () {
+            fill(COLORS.GRAY_224);
+            textAlign(CENTER, CENTER);
+            textSize(10);
+
+            pushMatrix();
+            scale(1, -1);
+            rotate(-90);
+            text(
+              "Benötige Zeit (in Sekunden)",
+              prop.x + prop.h / 2,
+              prop.y - prop.w - 10
+            ); //  y-axis
+            rotate(90);
+            text("Größe der Eingabe (bits)", prop.w / 2, 17); //  x-axis
+
+            stroke(COLORS.GRAY_32);
+            //line(360*10/env.maxX*0.95,0,360*10/env.maxX*0.95,-prop.h);
+            //line(360*50/env.maxX*0.95,0,360*50/env.maxX*0.95,-prop.h);
+            //line(360*100/env.maxX*0.95,0,360*100/env.maxX*0.95,-prop.h);
+            //line(360*1000/env.maxX*0.95,0,360*1000/env.maxX*0.95,-prop.h);
+
+            fill(COLORS.YELLOW);
+            text("10", round(((360 * 10) / env.maxX) * 0.95), 8);
+            text("50", round(((360 * 50) / env.maxX) * 0.95), 8);
+            text("100", round(((360 * 100) / env.maxX) * 0.95), 8);
+            text("1000", round(((360 * 1000) / env.maxX) * 0.95), 8);
+            popMatrix();
+          };
+          var _border = function () {
+            if (env.focus === prop.i) {
+              stroke(COLORS.RED);
+              strokeWeight(1);
+              noFill();
+              rect(-15, -15, prop.w + 20, prop.h + 20);
+            }
+          };
+          var _origin = function () {
+            fill(COLORS.GREEN);
+            stroke(COLORS.GREEN);
+            //ellipse(0,0,5,5);
+          };
+
+          var _axes = function () {
+            strokeWeight(1);
+            stroke(COLORS.GRAY);
+
+            line(-5, 0, prop.w, 0); //  x-axis
+            line(0, -5, 0, prop.h); //  y-axis
+
+            fill(COLORS.GRAY);
+
+            triangle(prop.w, 0, prop.w - 7, -3, prop.w - 7, 3);
+            triangle(0, prop.h, -3, prop.h - 7, 3, prop.h - 7);
+          };
+          var _hit = function (x, y) {
+            if (
+              x >= prop.x &&
+              x <= prop.x + prop.w &&
+              y >= prop.y - prop.h &&
+              y <= prop.y
+            ) {
+              return true;
+            }
+          };
+          var _drawNodes = function () {
+            var ctl;
+            var _x = 0;
+            var _y = 0;
+            var _x1 = 0;
+            var _y1 = 0;
+
+            for (ctl in env.mnodes) {
+              env.mnodes[ctl].refresh(mouseX, mouseY);
+
+              if (ctl > 0) {
+                _x = ((360 * env.mnodes[ctl].x()) / env.maxX) * 0.95;
+                _y = ((300 * env.mnodes[ctl].y()) / env.maxY) * 0.95;
+                _x1 = ((360 * env.mnodes[ctl - 1].x()) / env.maxX) * 0.95;
+                _y1 = ((300 * env.mnodes[ctl - 1].y()) / env.maxY) * 0.95;
+
+                line(_x, _y, _x1, _y1);
+              }
+            }
+
+            for (ctl in env.fnodes) {
+              env.fnodes[ctl].refresh(mouseX, mouseY);
+
+              if (ctl > 0) {
+                _x = ((360 * env.fnodes[ctl].x()) / env.maxX) * 0.95;
+                _y = ((300 * env.fnodes[ctl].y()) / env.maxY) * 0.95;
+                _x1 = ((360 * env.fnodes[ctl - 1].x()) / env.maxX) * 0.95;
+                _y1 = ((300 * env.fnodes[ctl - 1].y()) / env.maxY) * 0.95;
+
+                line(_x, _y, _x1, _y1);
+              }
+            }
+          };
+          var _scale = function () {};
+          var _draw = function (x, y) {
+            pushMatrix();
+
+            if (env.instructions) {
+              translate(prop.x, prop.y - 10);
+            } else {
+              translate(prop.x, prop.y);
+            }
+
+            scale(1, -1);
+
+            //_border();
+            _origin();
+            _ticks();
+            _axes();
+            _axisLabels();
+            _scale();
+
+            _drawNodes();
+
+            popMatrix();
+          };
+
+          this.clicked = function (x, y) {
+            if (_hit(x, y)) {
+              env.focus = prop.i;
+            }
+          };
+          this.refresh = function (x, y) {
+            _draw(x, y);
+          };
+          this.mouseMoved = function (x, y) {};
+        };
+        var controls = function () {
+          //  controls collection definition
+
+          var _controls = [];
+
+          this.add = function (prop) {
+            //  ADD
+
+            switch (prop.t) {
+              case CONTROLS.BUTTON:
+                _controls.push(new button(prop));
+                break;
+              case CONTROLS.LABEL:
+                _controls.push(new label(prop));
+                break;
+              case CONTROLS.GRAPH:
+                _controls.push(new graph(prop));
+                break;
+
+              case CONTROLS.INDEX:
+                _controls.push(new index(prop));
+                break;
+
+              case CONTROLS.PLAY:
+                _controls.push(new play(prop));
+                break;
+              case CONTROLS.CLEAR:
+                _controls.push(new clear(prop));
+                break;
+
+              case CONTROLS.INCREASE:
+                _controls.push(new increase(prop));
+                break;
+              case CONTROLS.DECREASE:
+                _controls.push(new decrease(prop));
+                break;
+            }
+          };
+          this.refresh = function (x, y) {
+            //  REFRESH
+            for (var ctl in _controls) {
+              _controls[ctl].refresh(x, y);
+            }
+          };
+          this.clicked = function (x, y) {
+            //  CLICKED
+            for (var ctl in _controls) {
+              _controls[ctl].clicked(x, y);
+            }
+          };
+          this.released = function () {
+            //  RELEASED
+            for (var ctl in _controls) {
+              _controls[ctl].released();
+            }
+          };
+          this.mouseMoved = function (x, y) {
+            //  MOVED
+            for (var ctl in _controls) {
+              _controls[ctl].mouseMoved(x, y);
+            }
+          };
+          this.item = function (n) {
+            return _controls[n];
+          };
+          this.length = function () {
+            return _controls.length;
+          };
+        };
+
+        //  controls collection object
+        var controls = new controls();
+
+        var DURATIONS, calculateTime;
+
+        DURATIONS = [
+          ["Year", 3.15569e7],
+          ["Month", 2.6e6],
+          ["Week", 6e5],
+          ["Day", 8.6e4],
+          ["Hour", 3600],
+          ["Minute", 60],
+        ];
+
+        var calculateTime = function (milliseconds) {
+          var durationName,
+            durationSeconds,
+            durations,
+            seconds,
+            time,
+            _i,
+            _len,
+            _ref;
+
+          if (milliseconds === 0) {
+            return "0 Sekunden";
+          }
+
+          seconds = abs(milliseconds / 1000);
+          time = "";
+
+          if (milliseconds < 0) {
+            time = "-";
+          }
+
+          for (_i = 0, _len = DURATIONS.length; _i < _len; _i++) {
+            _ref = DURATIONS[_i];
+            durationName = _ref[0];
+            durationSeconds = _ref[1];
+
+            if (seconds >= durationSeconds) {
+              durations = floor(seconds / durationSeconds);
+              seconds = seconds % durationSeconds;
+              time += "" + durations + " " + durationName;
+
+              if (durations > 1) {
+                time += "s";
+              }
+
+              time += " ";
+            }
+          }
+
+          if (seconds > 0) {
+            if (seconds === 1) {
+              time += "1 Sekunde";
+            } else {
+              time += "" + round(seconds * 100000) / 100000 + " Sekunden";
+            }
+          }
+
+          return time;
+        };
+
+        var exists = function (t, tm) {
+          var retval = false;
+          var ctl;
+
+          if (t === CONTROLS.FNODE) {
+            retval = false;
+            for (ctl in env.fnodes) {
+              if (env.fnodes[ctl].y() === tm) {
+                retval = true;
+              }
+            }
+            return retval;
+          } else {
+            retval = false;
+            for (ctl in env.mnodes) {
+              if (env.mnodes[ctl].y() === tm) {
+                retval = true;
+              }
+            }
+            return retval;
+          }
+        };
+
+        var factor = function (c) {
+          //if(sF===""){ return; }
+
+          var bits = _n;
+          //var bits=sF.toString(2).length;
+          var time =
+            pow(2, pow(bits * 1000, 1 / 3)) * 0.0000000012814937831915626;
+
+          var convertedTime = calculateTime(time);
+
+          if (exists(CONTROLS.FNODE, time) === false) {
+            if (bits > env.maxX) {
+              env.maxX = bits;
+            }
+            if (time > env.maxY) {
+              env.maxY = time;
+            }
+
+            var gx = ((360 * bits) / env.maxX) * 0.95;
+            var gy = ((310 * time) / env.maxY) * 0.95;
+
+            var p = new node(
+              new nprop(
+                env.fnodes.length,
+                bits,
+                time,
+                CONTROLS.FNODE,
+                "",
+                convertedTime,
+                gx,
+                gy
+              )
+            );
+
+            env.fnodes.push(p);
+
+            env.fnodes = env.fnodes.sort(function (a, b) {
+              return a.x() - b.x();
+            });
+          }
+
+          //sF="";
+          env.focus = 5;
+        };
+
+        var multiply = function (c) {
+          //if(sM1==="" || sM2===""){ return; }
+          var m = sM1 * sM2;
+
+          var bits = _n;
+          //var bits=m.toString(2).length;
+
+          var time = pow(bits * 1000, 2) * 1.2814937831915626e-8;
+          var convertedTime = calculateTime(time);
+
+          if (exists(CONTROLS.MNODE, time) === false) {
+            if (bits > env.maxX) {
+              env.maxX = bits;
+            }
+            if (time > env.maxY) {
+              env.maxY = time;
+            }
+
+            var gx = ((360 * bits) / env.maxX) * 0.95;
+            var gy = ((310 * time) / env.maxY) * 0.95;
+
+            var p = new node(
+              new nprop(
+                env.mnodes.length,
+                bits,
+                time,
+                CONTROLS.MNODE,
+                multiply,
+                convertedTime,
+                gx,
+                gy
+              )
+            );
+
+            env.mnodes.push(p);
+
+            env.mnodes = env.mnodes.sort(function (a, b) {
+              return a.x() - b.x();
+            });
+          }
+          //sM1="";
+          //sM2="";
+        };
+
+        var addNodes = function () {
+          multiply(_n);
+          factor(_n);
+
+          _n++;
+        };
+
+        //addNodes();
+
+        var drawLegend = function () {
+          if (env.legend) {
+            if (env.legendX < 50) {
+              env.legendX += 20;
+            }
+          } else {
+            if (env.legendX > -300) {
+              env.legendX -= 20;
+            }
+          }
+
+          var _x = env.legendX;
+
+          stroke(COLORS.AM5);
+          fill(COLORS._BLACK);
+          rect(_x, 20, 300, 350);
+
+          for (var n = 20; n < 370; n++) {
+            stroke(29, 81, 105, 275 - n / 2);
+            line(_x, n, _x + 300, n);
+          }
+
+          noFill();
+          stroke(COLORS.AM0);
+          strokeWeight(2);
+
+          fill(COLORS.AM5);
+          //rect(50,20,300,360);
+
+          var title = "Time Complexity";
+          var sub1 =
+            "Multiplikation vs. Faktorisierung - benötige Zeit abhängig von Eingabegröße.";
+
+          fill(COLORS._WHITE);
+
+          textAlign(CENTER, TOP);
+          textSize(20);
+          text(title, _x + 150, 30);
+
+          textAlign(LEFT, TOP);
+          textSize(12);
+          text(sub1, _x + 10, 60, 280, 400);
+
+          text("2⁵¹²" + tooltips[9], _x + 10, 100, 270, 400);
+        };
+
+        //  Add controls to the controls collection
+        controls.add(
+          new prop(
+            4,
+            20.5,
+            370.5,
+            370,
+            300,
+            CONTROLS.GRAPH,
+            false,
+            update,
+            "Graph"
+          )
+        );
+
+        controls.add(
+          new prop(0, 40, 100, 20, 20, CONTROLS.PLAY, false, animate, "animate")
+        );
+        controls.add(
+          new prop(1, 65, 100, 20, 20, CONTROLS.CLEAR, false, reset, "clear")
+        );
+
+        controls.add(
+          new prop(
+            2,
+            86,
+            92,
+            12,
+            12,
+            CONTROLS.INCREASE,
+            false,
+            increment,
+            "increment"
+          )
+        );
+        controls.add(
+          new prop(
+            3,
+            86,
+            108,
+            12,
+            12,
+            CONTROLS.DECREASE,
+            false,
+            decrement,
+            "decrement"
+          )
+        );
+
+        controls.add(
+          new prop(5, 5, 5, 15, 15, CONTROLS.INDEX, false, drawLegend, "index")
+        );
+
+        var header = function () {
+          strokeWeight(2);
+
+          var _y = 15;
+          var _x = 50;
+          var sz = 7;
+
+          //  Factor
+          fill(COLORS.BLUE);
+          stroke(COLORS.BLUE);
+          strokeWeight(2);
+
+          line(_x - 10, _y, _x + 10, _y);
+
+          beginShape();
+          vertex(_x - sz / 2, _y); //  left
+          vertex(_x, _y - sz / 2); //  top
+          vertex(_x + sz / 2, _y); //  right
+          vertex(_x, _y + sz / 2); //  bottom
+          endShape(CLOSE);
+
+          _y = 49;
+
+          //  Multiply
+          sz -= 1;
+          stroke(COLORS.RED);
+          fill(COLORS.RED);
+          line(40, _y, 60, _y);
+          ellipse(50, _y, sz, sz);
+
+          textSize(14);
+          textAlign(LEFT, CENTER);
+
+          fill(COLORS.BLUE);
+          text("Faktorisierung", 70, 15);
+
+          fill(COLORS.RED);
+          text("Multiplikation", 70, 47);
+        };
+
+        var telemetry = function () {
+          if (env.instructions === false) {
+            return;
+          }
+
+          strokeWeight(1);
+          stroke(COLORS.RED);
+
+          textSize(14);
+          fill(COLORS.GRAY_224);
+
+          var fText = 0;
+          var mText = 0;
+
+          //  max factor
+          if (env.fnodes.length !== 0) {
+            fText = calculateTime(env.fnodes[env.fnodes.length - 1].y());
+          }
+
+          //  max multiply
+          if (env.mnodes.length !== 0) {
+            mText = calculateTime(env.mnodes[env.mnodes.length - 1].y());
+          }
+
+          text(fText, 40, 30);
+          text(mText, 40, 65);
+
+          textSize(10);
+          text(env.tooltip, 10, 390);
+        };
+
+        var draw = function () {
+          background(env.background);
+
+          controls.refresh(mouseX, mouseY);
+
+          header();
+
+          telemetry();
+
+          if (env.animate) {
+            if (frameCount % env.animateRate === 0) {
+              addNodes();
+            }
+          }
+
+          //  Always last!
+          drawLegend();
+        };
+
+        var mousePressed = function () {
+          env.pressed = true;
+        };
+        var mouseReleased = function () {
+          env.pressed = false;
+        };
+
+        var mouseClicked = function () {
+          controls.clicked(mouseX, mouseY);
+        };
+        var mouseMoved = function () {
+          controls.mouseMoved(mouseX, mouseY);
+        };
+
+        var keyPressed = function () {
+          /**
+
+      Keyboard
+      0-9:  48 - 57
+
+      Keypad
+      0-9:  96 - 105
+
+    **/
+          var _s = 0;
+
+          if (
+            (keyCode > 47 && keyCode < 58) ||
+            (keyCode > 95 && keyCode < 106)
+          ) {
+            switch (keyCode) {
+              case 48:
+              case 96:
+                _s = "0";
+                break;
+              case 49:
+              case 97:
+                _s = "1";
+                break;
+              case 50:
+              case 98:
+                _s = "2";
+                break;
+              case 51:
+              case 99:
+                _s = "3";
+                break;
+              case 52:
+              case 100:
+                _s = "4";
+                break;
+              case 53:
+              case 101:
+                _s = "5";
+                break;
+              case 54:
+              case 102:
+                _s = "6";
+                break;
+              case 55:
+              case 103:
+                _s = "7";
+                break;
+              case 56:
+              case 104:
+                _s = "8";
+                break;
+              case 57:
+              case 105:
+                _s = "9";
+                break;
+
+              default:
+                break;
+            }
+          }
+
+          switch (env.focus) {
+            case 5:
+              sF += _s;
+              break;
+            case 3:
+              sM1 += _s;
+              break;
+            case 4:
+              sM2 += _s;
+              break;
+
+            default:
+              break;
+          }
+        };
+      }
+    };
+
+    // Get the canvas that Processing-js will use
+    var canvas = document.getElementById("mycanvas");
+    // Pass the function sketchProc (defined in myCode.js) to Processing's constructor.
+    var processingInstance = new Processing(canvas, sketchProc);
+  </script>
+</html>
