@@ -8,7 +8,7 @@ $(document).ready(function(){
         if (decrypted) {
           $('#interactive-rsa-no-padding-output-text').val(decrypted);
         } else {
-          $('#interactive-rsa-no-padding-output-text').val('Fehler bei Entlüsselung!');
+          $('#interactive-rsa-no-padding-output-text').val('Fehler bei Entschlüsselung!');
         }
       
     });
