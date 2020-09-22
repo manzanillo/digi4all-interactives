@@ -91,6 +91,10 @@
     font-weight: 70;
     font-size: 120%;
     letter-spacing: 1px;
+    color: black;
+    text-shadow: none;
+    background-color: white;
+  "
 }
 
 .message {
