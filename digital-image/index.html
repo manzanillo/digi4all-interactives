@@ -12,6 +12,14 @@
         canvas {
             margin-left: 4em;
         }
+
+        .clicked {
+            background-color: red;
+        }
+
+        .clicked:focus {
+            background-color: red;
+        }
     </style>
 
 <body>
@@ -22,7 +30,7 @@
             <div class="col s2">Zeitdiskretisierung:</div>
             <!-- TODO change to slider -->
             <div class="col s10">
-                <button id="eval-btn-z-512" class="btn-small" onclick="zeit(512)">512</button>
+                <button id="eval-btn-z-512" class="btn-small clicked" onclick="zeit(512)">512</button>
                 <button id="eval-btn-z-256" class="btn-small" onclick="zeit(256)">256</button>
                 <button id="eval-btn-z-128" class="btn-small" onclick="zeit(128)">128</button>
                 <button id="eval-btn-z-64" class="btn-small" onclick="zeit(64)">64</button>
@@ -35,7 +43,7 @@
         <div class="row">
             <div class="col s2">Wertdiskretisierung:</div>
             <div class="col s10">
-                <button id="eval-btn-w-256" class="btn-small" onclick="wert(256)">16,7 Mio.</button>
+                <button id="eval-btn-w-256" class="btn-small clicked" onclick="wert(256)">16,7 Mio.</button>
                 <button id="eval-btn-w-128" class="btn-small" onclick="wert(128)">2 Mio.</button>
                 <button id="eval-btn-w-64" class="btn-small" onclick="wert(64)">262.144</button>
                 <button id="eval-btn-w-32" class="btn-small" onclick="wert(32)">32.768</button>
@@ -78,7 +86,7 @@
             "128": 2000000, 
             "64": 262144, 
             "32": 32768, 
-            "16:": 4096, 
+            "16": 4096, 
             "8": 512, 
             "4": 64, 
             "2": 27, 
@@ -142,12 +150,16 @@
         
         var zeit = function (n){
 			//document.getElementById("eval-btn-z-"+n);
+            document.getElementById("eval-btn-z-"+zeitD).classList.remove("clicked");
             zeitD = n;
+            document.getElementById("eval-btn-z-"+n).classList.add("clicked");
             diskretisiere();
         }
         
         var wert = function(n){
+            document.getElementById("eval-btn-w-"+wertD).classList.remove("clicked");
             wertD = n;   
+            document.getElementById("eval-btn-w-"+n).classList.add("clicked");
             diskretisiere();
         }
         
