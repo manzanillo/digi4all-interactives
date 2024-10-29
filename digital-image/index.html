@@ -46,9 +46,55 @@
                 <button id="eval-btn-w-1" class="btn-small" onclick="wert(1)">8</button>               
             </div>
         </div>
+        <div class="row" >
+            <div class="col s12">
+                <div id="compressed-size"></div>
+            </div>
+        </div>
     </div>
 
     <script>
+        function calculateCompressedSize(n, m, baselineSize = 600 * 1024, baselineN = 512, baselineM = 16700000) {
+            // Calculate uncompressed sizes for baseline and target
+            const bitsPerPixelBaseline = Math.log2(baselineM);
+            const uncompressedBaselineSize = (baselineN * baselineN * bitsPerPixelBaseline) / 8;
+
+            const bitsPerPixelTarget = Math.log2(m);
+            const uncompressedTargetSize = (n * n * bitsPerPixelTarget) / 8;
+
+            // Calculate compression ratio based on baseline compressed to uncompressed size
+            const compressionRatio = baselineSize / uncompressedBaselineSize;
+
+            // Estimate compressed size for the target image based on uncompressed size and compression ratio
+            const estimatedCompressedSize = uncompressedTargetSize * compressionRatio;
+
+            return estimatedCompressedSize;
+        }
+
+        // Example usage
+        const nValues = [512, 256, 128, 64, 32, 16, 8, 4];
+        const wertTomValues = {
+            "256": 16700000, 
+            "128": 2000000, 
+            "64": 262144, 
+            "32": 32768, 
+            "16:": 4096, 
+            "8": 512, 
+            "4": 64, 
+            "2": 27, 
+            "1": 8}
+
+        function updateCompressedSize() {
+                    const size = calculateCompressedSize(zeitD, wertTomValues[wertD]);
+                    if (size > 1024){
+                    document.getElementById('compressed-size').innerText = `Geschätzte Größe: ${Math.round(size / 1024)} KB`;
+                    }
+                    else{
+                        document.getElementById('compressed-size').innerText = `Geschätzte Größe: ${Math.round(size)} B`;
+                    }
+                }
+       
+
         var zeitD = 512, wertD = 256;
         
         var diskretisiere = function(){            
@@ -88,7 +134,9 @@
             }
             
         targetCtx.putImageData(target,0,0);
-            
+
+        updateCompressedSize();
+
         }
         
         
